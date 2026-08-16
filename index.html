@@ -146,7 +146,7 @@
       <h2 class="section-title">Executive Panel</h2>
       <p class="section-desc">TalentVerse Bangladesh এর নেতৃত্বে যারা আছেন।</p>
     </div>
-    <div class="team-grid">
+    <div class="team-grid" id="home-team-grid">
       <div class="team-card">
         <div class="team-avatar">AR</div>
         <h4>Abdur Rahman</h4>
@@ -163,6 +163,24 @@
     </div>
   </div>
 </section>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const app = initializeApp({ apiKey:"AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c", authDomain:"talentverse-bd-b072c.firebaseapp.com", databaseURL:"https://talentverse-bd-b072c-default-rtdb.firebaseio.com", projectId:"talentverse-bd-b072c", storageBucket:"talentverse-bd-b072c.firebasestorage.app", messagingSenderId:"304686688553", appId:"1:304686688553:web:0a887b8fc517e24d00af38" });
+const db = getDatabase(app);
+onValue(ref(db,'members'), snap => {
+  const grid = document.getElementById('home-team-grid');
+  if(!snap.exists()) return;
+  const data = snap.val();
+  const members = Object.values(data).slice(0,4);
+  grid.innerHTML = members.map(m => {
+    const av = m.photo
+      ? `<img src="${m.photo}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin:0 auto 10px;display:block;">`
+      : `<div class="team-avatar">${m.initials||m.name.substring(0,2).toUpperCase()}</div>`;
+    return `<div class="team-card">${av}<h4>${m.name}</h4><p>${m.role}</p></div>`;
+  }).join('');
+});
+</script>
 
 <!-- JOIN CTA -->
 <section class="join-cta">
@@ -247,7 +265,7 @@ function quickMsg(btn){document.getElementById("chatInput").value=btn.textConten
 function addMsg(text,isUser){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg "+(isUser?"user":"bot");if(isUser){div.innerHTML=`<div class="msg-av-u">আ</div><div class="msg-bubble">${text}</div>`;}else{div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="msg-bubble">${text.replace(/\n/g,"<br>")}</div>`;}msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
 function showTyping(){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg bot";div.id="typing";div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="typing"><span></span><span></span><span></span></div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
 function removeTyping(){const t=document.getElementById("typing");if(t)t.remove();}
-async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.sendMessage(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, সমস্যা হয়েছে। WhatsApp: +8801634428536",false);}btn.disabled=false;input.focus();}
+async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.getReply(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, সমস্যা হয়েছে। WhatsApp: +8801634428536",false);}btn.disabled=false;input.focus();}
 setTimeout(()=>{if(!chatOpen)document.getElementById("chat-badge").style.display="flex";},3000);
 </script>
 
