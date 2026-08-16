@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join Our Team — TalentVerse Bangladesh</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo"><img src="logo.png" alt="TalentVerse Bangladesh"><span>Talent<b>Verse</b></span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="team.html">Executive Panel</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="verify.html">🎖️ Verify</a></li>
+    <li><a href="join.html" class="nav-cta active">Join Our Team</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="about.html">ℹ️ About</a>
+  <a href="events.html">🏆 Events</a>
+  <a href="team.html">👥 Executive Panel</a>
+  <a href="contact.html">📬 Contact</a>
+  <a href="verify.html">🎖️ Certificate Verify</a>
+  <a href="join.html">🤝 Join Our Team</a>
+</div>
+
+<div class="page-hero">
+  <h1>Join Our Team 🤝</h1>
+  <p>TalentVerse Bangladesh এর একজন সদস্য হোন।</p>
+</div>
+
+<section style="background:var(--light-gray);">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
+      <div>
+        <p class="eyebrow">Why Join Us?</p>
+        <h2 class="section-title">কেন যোগ দেবেন?</h2>
+        <ul class="value-list" style="margin-top:20px;">
+          <li><div class="vi">🌟</div><div><strong>অভিজ্ঞতা</strong> — ইভেন্ট ও প্রোগ্রামে কাজের সুযোগ।</div></li>
+          <li><div class="vi">🤝</div><div><strong>নেটওয়ার্কিং</strong> — প্রতিভাবান মানুষদের সাথে পরিচিত হওয়া।</div></li>
+          <li><div class="vi">📜</div><div><strong>সার্টিফিকেট</strong> — অংশগ্রহণের সার্টিফিকেট।</div></li>
+          <li><div class="vi">🚀</div><div><strong>লিডারশিপ</strong> — নেতৃত্বের দক্ষতা বিকাশ।</div></li>
+          <li><div class="vi">💡</div><div><strong>ক্রিয়েটিভিটি</strong> — নতুন আইডিয়া নিয়ে কাজের স্বাধীনতা।</div></li>
+        </ul>
+        <div style="margin-top:28px;background:white;border:1px solid var(--border);border-radius:14px;padding:20px;">
+          <h4 style="margin-bottom:12px;font-size:14px;">আমরা খুঁজছি:</h4>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <span style="background:var(--light-blue);color:var(--blue);padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;">Event Organizer</span>
+            <span style="background:var(--light-blue);color:var(--blue);padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;">Content Creator</span>
+            <span style="background:var(--light-blue);color:var(--blue);padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;">Social Media Manager</span>
+            <span style="background:var(--light-blue);color:var(--blue);padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;">Graphic Designer</span>
+            <span style="background:var(--light-blue);color:var(--blue);padding:5px 12px;border-radius:100px;font-size:12px;font-weight:600;">Volunteer</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:white;border:1px solid var(--border);border-radius:18px;padding:32px;">
+        <h3 style="font-family:'Playfair Display',serif;font-size:20px;margin-bottom:6px;">Apply Now</h3>
+        <p style="font-size:13px;color:var(--gray);margin-bottom:22px;">ফর্মটি পূরণ করুন, আমরা শীঘ্রই যোগাযোগ করব।</p>
+
+        <div id="joinForm">
+          <div class="form-group">
+            <input type="text" id="j-name" placeholder="আপনার পূর্ণ নাম / Full Name *">
+            <input type="email" id="j-email" placeholder="ইমেইল / Email *">
+            <input type="tel" id="j-phone" placeholder="মোবাইল নম্বর / Phone *">
+            <input type="text" id="j-district" placeholder="আপনার জেলা / District">
+            <select id="j-role">
+              <option value="" disabled selected>পদ / Role এর জন্য আবেদন করছেন *</option>
+              <option>Event Organizer</option>
+              <option>Content Creator</option>
+              <option>Social Media Manager</option>
+              <option>Graphic Designer</option>
+              <option>Volunteer</option>
+              <option>Community Manager</option>
+              <option>Other</option>
+            </select>
+            <textarea id="j-about" placeholder="আপনার সম্পর্কে কিছু লিখুন *" style="min-height:100px;"></textarea>
+            <button type="button" onclick="submitJoin()" style="background:var(--blue);color:white;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;width:100%;transition:background .2s;" onmouseover="this.style.background='#0D1B40'" onmouseout="this.style.background='#1A6BCC'">🚀 Submit Application</button>
+          </div>
+        </div>
+
+        <div id="joinSuccess" style="display:none;text-align:center;padding:32px 20px;">
+          <div style="font-size:56px;margin-bottom:16px;">🎉</div>
+          <h3 style="font-size:20px;font-weight:800;margin-bottom:8px;">আবেদন জমা হয়েছে!</h3>
+          <p style="color:var(--gray);font-size:14px;line-height:1.7;">ধন্যবাদ! আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।<br>আমাদের Facebook/WhatsApp এ যোগাযোগ রাখুন।</p>
+          <a href="index.html" style="display:inline-block;margin-top:20px;background:var(--light-blue);color:var(--blue);padding:10px 24px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;">🏠 Home এ ফিরুন</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><img src="logo.png" alt="TalentVerse Bangladesh"><div><h4>TalentVerse Bangladesh</h4><p>Where Talent Meets Opportunity</p></div></div>
+    <div class="footer-links"><h5>Quick Links</h5><a href="index.html">Home</a><a href="about.html">About</a><a href="events.html">Events</a><a href="team.html">Executive Panel</a><a href="contact.html">Contact</a><a href="verify.html">Certificate Verify</a><a href="join.html">Join Our Team</a></div>
+    <div class="footer-contact"><h5>Contact</h5><p>📍 Bangladesh</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/share/18HcL7fN3C/" target="_blank">📘 Facebook</a>
+        <a href="https://www.instagram.com/talentverse.bangladesh07" target="_blank">📸 Instagram</a>
+        <a href="https://wa.me/8801634428536" target="_blank">💬 WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 TalentVerse Bangladesh. All Rights Reserved.</p></div>
+</footer>
+
+<script src="script.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const app = initializeApp({ apiKey:"AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c", authDomain:"talentverse-bd-b072c.firebaseapp.com", databaseURL:"https://talentverse-bd-b072c-default-rtdb.firebaseio.com", projectId:"talentverse-bd-b072c", storageBucket:"talentverse-bd-b072c.firebasestorage.app", messagingSenderId:"304686688553", appId:"1:304686688553:web:0a887b8fc517e24d00af38" });
+const db = getDatabase(app);
+
+window.submitJoin = async function() {
+  const name = document.getElementById('j-name').value.trim();
+  const email = document.getElementById('j-email').value.trim();
+  const phone = document.getElementById('j-phone').value.trim();
+  const district = document.getElementById('j-district').value.trim();
+  const role = document.getElementById('j-role').value;
+  const about = document.getElementById('j-about').value.trim();
+
+  if(!name||!email||!phone||!role||!about){ alert('সকল * চিহ্নিত তথ্য দিন!'); return; }
+
+  const btn = document.querySelector('#joinForm button');
+  btn.textContent = '⏳ জমা হচ্ছে...';
+  btn.disabled = true;
+
+  await push(ref(db, 'applications'), {
+    name, email, phone, district, role, about,
+    status: 'pending',
+    submittedAt: Date.now(),
+    date: new Date().toLocaleDateString('bn-BD')
+  });
+
+  document.getElementById('joinForm').style.display = 'none';
+  document.getElementById('joinSuccess').style.display = 'block';
+}
+</script>
+
+<!-- CHATBOT -->
+<link rel="stylesheet" href="chatbot.css">
+<button class="chat-btn" onclick="toggleChat()" title="TVBot">🤖<span class="chat-badge" id="chat-badge" style="display:none">1</span></button>
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <img src="logo.png" alt="TVBot" class="chat-header-av">
+    <div class="chat-header-info"><h4>TVBot 🤖</h4><p>Online · TalentVerse Bangladesh</p></div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot">
+      <img src="logo.png" alt="" class="msg-av">
+      <div>
+        <div class="msg-bubble">আস্সালামু আলাইকুম! 👋 আমি TVBot। আপনাকে কীভাবে সাহায্য করতে পারি?</div>
+        <div class="quick-btns" style="margin-top:8px;">
+          <button class="quick-btn" onclick="quickMsg(this)">🏆 Events জানতে চাই</button>
+          <button class="quick-btn" onclick="quickMsg(this)">🤝 Join করতে চাই</button>
+          <button class="quick-btn" onclick="quickMsg(this)">🎖️ Certificate Verify</button>
+          <button class="quick-btn" onclick="quickMsg(this)">📞 যোগাযোগ করব</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input">
+    <textarea id="chatInput" placeholder="বার্তা লিখুন..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="chat-send" id="sendBtn" onclick="handleSend()">➤</button>
+  </div>
+</div>
+<script src="chatbot.js"></script>
+<script>
+let chatOpen=false;
+function toggleChat(){chatOpen=!chatOpen;document.getElementById("chatWindow").classList.toggle("open",chatOpen);document.getElementById("chat-badge").style.display="none";if(chatOpen)document.getElementById("chatInput").focus();}
+function autoResize(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,80)+"px";}
+function handleKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleSend();}}
+function quickMsg(btn){document.getElementById("chatInput").value=btn.textContent.trim();handleSend();}
+function addMsg(text,isUser){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg "+(isUser?"user":"bot");if(isUser){div.innerHTML=`<div class="msg-av-u">আ</div><div class="msg-bubble">${text}</div>`;}else{div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="msg-bubble">${text.replace(/\n/g,"<br>")}</div>`;}msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function showTyping(){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg bot";div.id="typing";div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="typing"><span></span><span></span><span></span></div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function removeTyping(){const t=document.getElementById("typing");if(t)t.remove();}
+async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.sendMessage(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, সমস্যা হয়েছে। WhatsApp: +8801634428536",false);}btn.disabled=false;input.focus();}
+setTimeout(()=>{if(!chatOpen)document.getElementById("chat-badge").style.display="flex";},3000);
+</script>
+
+</body>
+</html>

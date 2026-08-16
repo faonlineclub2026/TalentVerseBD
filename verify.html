@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Certificate Verify — TalentVerse Bangladesh</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+.verify-wrap { max-width: 600px; margin: 0 auto; }
+.verify-box { background: white; border: 1px solid var(--border); border-radius: 20px; padding: 40px; text-align: center; }
+.verify-box .icon { font-size: 64px; margin-bottom: 16px; }
+.verify-input { display: flex; gap: 12px; margin: 28px 0; }
+.verify-input input { flex: 1; border: 2px solid var(--border); border-radius: 10px; padding: 14px 18px; font-size: 16px; font-family: 'Inter', sans-serif; outline: none; transition: border-color 0.2s; }
+.verify-input input:focus { border-color: var(--blue); }
+.verify-input button { background: var(--blue); color: white; border: none; padding: 14px 24px; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; white-space: nowrap; transition: background 0.2s; }
+.verify-input button:hover { background: var(--navy); }
+
+/* Result */
+.result-box { display: none; border-radius: 16px; padding: 28px; margin-top: 20px; text-align: left; }
+.result-box.success { background: #f0fdf4; border: 2px solid #86efac; }
+.result-box.error { background: #fef2f2; border: 2px solid #fca5a5; text-align: center; }
+.result-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.result-header .badge { font-size: 32px; }
+.result-header h3 { font-size: 18px; font-weight: 800; color: #166534; }
+.result-header p { font-size: 13px; color: #15803d; }
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.result-item { background: white; border-radius: 10px; padding: 14px; }
+.result-item .label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray); margin-bottom: 4px; }
+.result-item .value { font-size: 14px; font-weight: 600; color: var(--navy); }
+.error-icon { font-size: 48px; margin-bottom: 12px; display: block; }
+.error-text { font-size: 16px; font-weight: 700; color: #dc2626; margin-bottom: 6px; }
+.error-sub { font-size: 13px; color: #ef4444; }
+
+.how-box { background: var(--light-gray); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-top: 24px; text-align: left; }
+.how-box h4 { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+.how-step { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 13px; color: var(--gray); }
+.how-step .num { background: var(--blue); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+</style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo"><img src="logo.png" alt="TalentVerse Bangladesh"><span>Talent<b>Verse</b></span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="team.html">Executive Panel</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="verify.html">🎖️ Verify</a></li>
+    <li><a href="join.html" class="nav-cta">Join Our Team</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a><a href="about.html">ℹ️ About</a>
+  <a href="events.html">🏆 Events</a><a href="team.html">👥 Executive Panel</a>
+  <a href="contact.html">📬 Contact</a><a href="verify.html">🎖️ Certificate Verify</a>
+  <a href="join.html">🤝 Join Our Team</a>
+</div>
+
+<div class="page-hero">
+  <h1>Certificate Verify</h1>
+  <p>আপনার সার্টিফিকেটের সত্যতা যাচাই করুন।</p>
+</div>
+
+<section style="background:var(--light-gray);">
+  <div class="verify-wrap">
+    <div class="verify-box">
+      <div class="icon">🎖️</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px;">সার্টিফিকেট যাচাই</h2>
+      <p style="color:var(--gray);font-size:14px;">সার্টিফিকেটের ID নম্বর দিয়ে সত্যতা যাচাই করুন।</p>
+
+      <div class="verify-input">
+        <input type="text" id="certId" placeholder="Certificate ID (e.g. TVB-2026-001)" oninput="this.value = this.value.toUpperCase()">
+        <button onclick="verifyCert()">🔍 Verify</button>
+      </div>
+
+      <!-- Success Result -->
+      <div class="result-box success" id="resultSuccess">
+        <div class="result-header">
+          <span class="badge">✅</span>
+          <div>
+            <h3>সার্টিফিকেট যাচাই হয়েছে!</h3>
+            <p>এই সার্টিফিকেটটি সত্যিকারের</p>
+          </div>
+        </div>
+        <div class="result-grid">
+          <div class="result-item">
+            <div class="label">Certificate ID</div>
+            <div class="value" id="res-id">—</div>
+          </div>
+          <div class="result-item">
+            <div class="label">অংশগ্রহণকারীর নাম</div>
+            <div class="value" id="res-name">—</div>
+          </div>
+          <div class="result-item">
+            <div class="label">ইভেন্ট</div>
+            <div class="value" id="res-event">—</div>
+          </div>
+          <div class="result-item">
+            <div class="label">তারিখ</div>
+            <div class="value" id="res-date">—</div>
+          </div>
+          <div class="result-item">
+            <div class="label">ক্যাটাগরি</div>
+            <div class="value" id="res-category">—</div>
+          </div>
+          <div class="result-item">
+            <div class="label">Status</div>
+            <div class="value" style="color:#166534;">✅ Valid</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error Result -->
+      <div class="result-box error" id="resultError">
+        <span class="error-icon">❌</span>
+        <p class="error-text">সার্টিফিকেট পাওয়া যায়নি!</p>
+        <p class="error-sub">এই ID দিয়ে কোনো সার্টিফিকেট নেই। ID টি সঠিকভাবে লিখুন।</p>
+      </div>
+
+      <div class="how-box">
+        <h4>📋 Certificate ID কোথায় পাবেন?</h4>
+        <div class="how-step"><div class="num">1</div><div>আপনার সার্টিফিকেটের নিচে বা পিছনে ID লেখা থাকবে।</div></div>
+        <div class="how-step"><div class="num">2</div><div>Format হবে: <strong>TVB-2026-001</strong></div></div>
+        <div class="how-step"><div class="num">3</div><div>সমস্যা হলে আমাদের <a href="contact.html" style="color:var(--blue);">Contact</a> পেজে যোগাযোগ করুন।</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><img src="logo.png" alt="TalentVerse Bangladesh"><div><h4>TalentVerse Bangladesh</h4><p>Where Talent Meets Opportunity</p></div></div>
+    <div class="footer-links"><h5>Quick Links</h5><a href="index.html">Home</a><a href="about.html">About</a><a href="events.html">Events</a><a href="team.html">Executive Panel</a><a href="contact.html">Contact</a><a href="join.html">Join Our Team</a></div>
+    <div class="footer-contact"><h5>Contact</h5><p>📍 Bangladesh</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/share/18HcL7fN3C/" target="_blank">📘 Facebook</a>
+        <a href="https://www.instagram.com/talentverse.bangladesh07" target="_blank">📸 Instagram</a>
+        <a href="https://wa.me/8801634428536" target="_blank">💬 WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 TalentVerse Bangladesh. All Rights Reserved.</p></div>
+</footer>
+
+<script src="script.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c",
+  authDomain: "talentverse-bd-b072c.firebaseapp.com",
+  databaseURL: "https://talentverse-bd-b072c-default-rtdb.firebaseio.com",
+  projectId: "talentverse-bd-b072c",
+  storageBucket: "talentverse-bd-b072c.firebasestorage.app",
+  messagingSenderId: "304686688553",
+  appId: "1:304686688553:web:0a887b8fc517e24d00af38"
+});
+const db = getDatabase(app);
+
+window.verifyCert = async function() {
+  const id = document.getElementById('certId').value.trim().toUpperCase();
+  if (!id) { alert('Certificate ID দিন!'); return; }
+
+  document.getElementById('resultSuccess').style.display = 'none';
+  document.getElementById('resultError').style.display = 'none';
+
+  try {
+    const snap = await get(ref(db, 'certificates/' + id.replace(/[^A-Z0-9]/g, '_')));
+    if (snap.exists()) {
+      const c = snap.val();
+      document.getElementById('res-id').textContent = id;
+      document.getElementById('res-name').textContent = c.name || '—';
+      document.getElementById('res-event').textContent = c.event || '—';
+      document.getElementById('res-date').textContent = c.date || '—';
+      document.getElementById('res-category').textContent = c.category || '—';
+      document.getElementById('resultSuccess').style.display = 'block';
+    } else {
+      document.getElementById('resultError').style.display = 'block';
+    }
+  } catch(e) {
+    document.getElementById('resultError').style.display = 'block';
+  }
+}
+</script>
+
+<!-- CHATBOT -->
+<link rel="stylesheet" href="chatbot.css">
+<button class="chat-btn" onclick="toggleChat()" title="TVBot">🤖<span class="chat-badge" id="chat-badge" style="display:none">1</span></button>
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <img src="logo.png" alt="TVBot" class="chat-header-av">
+    <div class="chat-header-info"><h4>TVBot 🤖</h4><p>Online · TalentVerse Bangladesh</p></div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot">
+      <img src="logo.png" alt="" class="msg-av">
+      <div>
+        <div class="msg-bubble">আস্সালামু আলাইকুম! 👋 আমি TVBot। আপনাকে কীভাবে সাহায্য করতে পারি?</div>
+        <div class="quick-btns" style="margin-top:8px;">
+          <button class="quick-btn" onclick="quickMsg(this)">🏆 Events জানতে চাই</button>
+          <button class="quick-btn" onclick="quickMsg(this)">🤝 Join করতে চাই</button>
+          <button class="quick-btn" onclick="quickMsg(this)">🎖️ Certificate Verify</button>
+          <button class="quick-btn" onclick="quickMsg(this)">📞 যোগাযোগ করব</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input">
+    <textarea id="chatInput" placeholder="বার্তা লিখুন..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="chat-send" id="sendBtn" onclick="handleSend()">➤</button>
+  </div>
+</div>
+<script src="chatbot.js"></script>
+<script>
+let chatOpen=false;
+function toggleChat(){chatOpen=!chatOpen;document.getElementById("chatWindow").classList.toggle("open",chatOpen);document.getElementById("chat-badge").style.display="none";if(chatOpen)document.getElementById("chatInput").focus();}
+function autoResize(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,80)+"px";}
+function handleKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleSend();}}
+function quickMsg(btn){document.getElementById("chatInput").value=btn.textContent.trim();handleSend();}
+function addMsg(text,isUser){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg "+(isUser?"user":"bot");if(isUser){div.innerHTML=`<div class="msg-av-u">আ</div><div class="msg-bubble">${text}</div>`;}else{div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="msg-bubble">${text.replace(/\n/g,"<br>")}</div>`;}msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function showTyping(){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg bot";div.id="typing";div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="typing"><span></span><span></span><span></span></div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function removeTyping(){const t=document.getElementById("typing");if(t)t.remove();}
+async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.sendMessage(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, সমস্যা হয়েছে। WhatsApp: +8801634428536",false);}btn.disabled=false;input.focus();}
+setTimeout(()=>{if(!chatOpen)document.getElementById("chat-badge").style.display="flex";},3000);
+</script>
+
+</body>
+</html>

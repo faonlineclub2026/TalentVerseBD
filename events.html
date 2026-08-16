@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Events — TalentVerse Bangladesh</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo"><img src="logo.png" alt="TalentVerse Bangladesh"><span>Talent<b>Verse</b></span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="events.html" class="active">Events</a></li>
+    <li><a href="team.html">Executive Panel</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="verify.html">🎖️ Verify</a></li>
+    <li><a href="join.html" class="nav-cta">Join Our Team</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a><a href="about.html">ℹ️ About</a>
+  <a href="events.html">🏆 Events</a><a href="team.html">👥 Executive Panel</a>
+  <a href="contact.html">📬 Contact</a><a href="verify.html">🎖️ Certificate Verify</a>
+  <a href="join.html">🤝 Join Our Team</a>
+</div>
+
+<div class="page-hero">
+  <h1>Events & Programs</h1>
+  <p>আমাদের সকল ইভেন্ট ও প্রোগ্রামের তালিকা।</p>
+</div>
+
+<!-- COUNTDOWN SECTION -->
+<section style="background:linear-gradient(135deg,var(--navy),#1a2e6e);padding:40px 5%;" id="countdown-section">
+  <div class="container" style="text-align:center;">
+    <p style="color:rgba(255,255,255,0.6);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px;">⏳ Next Event Countdown</p>
+    <h3 id="cd-event-name" style="color:white;font-family:'Playfair Display',serif;font-size:22px;margin-bottom:20px;">—</h3>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:16px 20px;min-width:70px;">
+        <div id="cd-days" style="font-size:32px;font-weight:900;color:white;">00</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;">Days</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:16px 20px;min-width:70px;">
+        <div id="cd-hours" style="font-size:32px;font-weight:900;color:white;">00</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;">Hours</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:16px 20px;min-width:70px;">
+        <div id="cd-mins" style="font-size:32px;font-weight:900;color:white;">00</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;">Mins</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.1);border-radius:12px;padding:16px 20px;min-width:70px;">
+        <div id="cd-secs" style="font-size:32px;font-weight:900;color:var(--bright);">00</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;">Secs</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-header">
+      <p class="eyebrow">All Events</p>
+      <h2 class="section-title">আমাদের আয়োজন</h2>
+      <p class="section-desc">প্রতিভা বিকাশের লক্ষ্যে আমরা নিয়মিত বিভিন্ন ইভেন্ট ও প্রতিযোগিতার আয়োজন করি।</p>
+    </div>
+    <div class="events-grid" id="events-grid">
+      <p style="color:var(--gray);">লোড হচ্ছে...</p>
+    </div>
+  </div>
+</section>
+
+<section class="join-cta">
+  <div class="container" style="text-align:center;">
+    <h2 class="section-title" style="color:white;">ইভেন্টের আপডেট পেতে চান?</h2>
+    <p style="color:rgba(255,255,255,0.75);font-size:17px;margin:16px auto 36px;max-width:500px;">আমাদের সাথে যোগ দিন এবং সকল ইভেন্টের আপডেট সবার আগে পান।</p>
+    <a href="join.html" class="btn-primary">🤝 Join Our Team</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><img src="logo.png" alt="TalentVerse Bangladesh"><div><h4>TalentVerse Bangladesh</h4><p>Where Talent Meets Opportunity</p></div></div>
+    <div class="footer-links"><h5>Quick Links</h5><a href="index.html">Home</a><a href="about.html">About</a><a href="events.html">Events</a><a href="team.html">Executive Panel</a><a href="contact.html">Contact</a><a href="join.html">Join Our Team</a></div>
+    <div class="footer-contact"><h5>Contact</h5><p>📍 Bangladesh</p><p>✉️ info@talentverse.bd</p><div class="social-links"><a href="https://www.facebook.com/share/18HcL7fN3C/" target="_blank">📘 Facebook</a><a href="https://www.instagram.com/talentverse.bangladesh07" target="_blank">📸 Instagram</a></div></div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 TalentVerse Bangladesh. All Rights Reserved.</p></div>
+</footer>
+
+<script src="script.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c",
+  authDomain: "talentverse-bd-b072c.firebaseapp.com",
+  databaseURL: "https://talentverse-bd-b072c-default-rtdb.firebaseio.com",
+  projectId: "talentverse-bd-b072c",
+  storageBucket: "talentverse-bd-b072c.firebasestorage.app",
+  messagingSenderId: "304686688553",
+  appId: "1:304686688553:web:0a887b8fc517e24d00af38"
+});
+const db = getDatabase(app);
+
+onValue(ref(db, 'events'), snap => {
+  const grid = document.getElementById('events-grid');
+  if (!snap.exists()) {
+    grid.innerHTML = '<p style="color:var(--gray);">কোনো ইভেন্ট নেই।</p>';
+    return;
+  }
+  const data = snap.val();
+  const keys = Object.keys(data).reverse();
+  grid.innerHTML = keys.map(k => {
+    const e = data[k];
+    const badge = e.status === 'Completed' ? 'badge-ongoing' : e.status === 'Ongoing' ? 'badge-upcoming' : 'badge-upcoming';
+    const badgeStyle = e.status === 'Completed' ? 'background:#dcfce7;color:#166534;' : e.status === 'Ongoing' ? 'background:#fef3c7;color:#92400e;' : 'background:#e0f2fe;color:#0369a1;';
+    return `<div class="event-card">
+      <div class="event-top" style="background:${e.color}">
+        <span class="event-tag">${e.category}</span>
+        <h3>${e.name}</h3>
+      </div>
+      <div class="event-body">
+        <div class="event-meta">
+          <span>📅 ${e.date}</span>
+          <span>🌐 ${e.platform}</span>
+          <span style="font-size:11px;font-weight:700;padding:2px 10px;border-radius:100px;${badgeStyle}">${e.status}</span>
+        </div>
+        <p>${e.desc}</p>
+        <a href="contact.html" class="event-btn">Register / Learn More →</a>
+      </div>
+    </div>`;
+  }).join('');
+});
+</script>
+
+<!-- CHATBOT -->
+<link rel="stylesheet" href="chatbot.css">
+<button class="chat-btn" onclick="toggleChat()" title="TVBot">🤖<span class="chat-badge" id="chat-badge" style="display:none">1</span></button>
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <img src="logo.png" alt="TVBot" class="chat-header-av">
+    <div class="chat-header-info"><h4>TVBot 🤖</h4><p>Online · TalentVerse Bangladesh</p></div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot">
+      <img src="logo.png" alt="" class="msg-av">
+      <div>
+        <div class="msg-bubble">আস্সালামু আলাইকুম! 👋 আমি TVBot। আপনাকে কীভাবে সাহায্য করতে পারি?</div>
+        <div class="quick-btns" style="margin-top:8px;">
+          <button class="quick-btn" onclick="quickMsg(this)">🏆 Events জানতে চাই</button>
+          <button class="quick-btn" onclick="quickMsg(this)">🤝 Join করতে চাই</button>
+          <button class="quick-btn" onclick="quickMsg(this)">🎖️ Certificate Verify</button>
+          <button class="quick-btn" onclick="quickMsg(this)">📞 যোগাযোগ করব</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input">
+    <textarea id="chatInput" placeholder="বার্তা লিখুন..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="chat-send" id="sendBtn" onclick="handleSend()">➤</button>
+  </div>
+</div>
+<script src="chatbot.js"></script>
+<script>
+let chatOpen=false;
+function toggleChat(){chatOpen=!chatOpen;document.getElementById("chatWindow").classList.toggle("open",chatOpen);document.getElementById("chat-badge").style.display="none";if(chatOpen)document.getElementById("chatInput").focus();}
+function autoResize(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,80)+"px";}
+function handleKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleSend();}}
+function quickMsg(btn){document.getElementById("chatInput").value=btn.textContent.trim();handleSend();}
+function addMsg(text,isUser){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg "+(isUser?"user":"bot");if(isUser){div.innerHTML=`<div class="msg-av-u">আ</div><div class="msg-bubble">${text}</div>`;}else{div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="msg-bubble">${text.replace(/\n/g,"<br>")}</div>`;}msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function showTyping(){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg bot";div.id="typing";div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="typing"><span></span><span></span><span></span></div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function removeTyping(){const t=document.getElementById("typing");if(t)t.remove();}
+async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.sendMessage(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, সমস্যা হয়েছে। WhatsApp: +8801634428536",false);}btn.disabled=false;input.focus();}
+setTimeout(()=>{if(!chatOpen)document.getElementById("chat-badge").style.display="flex";},3000);
+</script>
+
+</body>
+</html>
