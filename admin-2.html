@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — TalentVerse Bangladesh</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0D1B40;--blue:#1A6BCC;--bright:#3B9EFF;--lb:#E8F2FF;--w:#fff;--gray:#6B7280;--lg:#F5F8FF;--border:#D1E3FF;--red:#ef4444;--green:#10b981}
+body{font-family:'Inter',sans-serif;background:var(--lg);color:var(--navy)}
+.lw{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--navy),#1a2e6e)}
+.lb{background:white;border-radius:20px;padding:48px 40px;width:100%;max-width:400px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.lb img{width:90px;height:90px;border-radius:50%;margin-bottom:20px;border:3px solid var(--lb)}
+.lb h2{font-size:24px;font-weight:800;margin-bottom:4px}
+.lb p{font-size:13px;color:var(--gray);margin-bottom:28px}
+.lb input{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:13px 16px;font-size:14px;margin-bottom:12px;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s}
+.lb input:focus{border-color:var(--blue)}
+.lb button{width:100%;background:var(--blue);color:white;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.lb button:hover{background:var(--navy)}
+.lerr{color:var(--red);font-size:13px;margin-top:10px;display:none}
+.aw{display:none;min-height:100vh}
+.sb{width:250px;background:var(--navy);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;overflow-y:auto;z-index:50}
+.sl{display:flex;align-items:center;gap:10px;padding:20px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:8px}
+.sl img{width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,.2)}
+.sl span{font-size:14px;font-weight:700;color:white}
+.sl b{color:var(--bright)}
+.ns{padding:8px 16px 4px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(255,255,255,.65);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;border-left:3px solid transparent}
+.ni:hover{background:rgba(255,255,255,.07);color:white}
+.ni.active{background:rgba(59,158,255,.12);color:var(--bright);border-left-color:var(--bright)}
+.ni .ic{font-size:16px;width:20px;text-align:center}
+.sbm{margin-top:auto;padding:16px;border-top:1px solid rgba(255,255,255,.08)}
+.lob{width:100%;background:rgba(239,68,68,.12);color:#fca5a5;border:none;padding:10px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.lob:hover{background:rgba(239,68,68,.25)}
+.main{margin-left:250px;padding:28px;min-height:100vh}
+.tb{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.tb h1{font-size:20px;font-weight:800}
+.tb p{font-size:12px;color:var(--gray);margin-top:2px}
+.vs{background:var(--lb);color:var(--blue);padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none}
+.vs:hover{background:var(--blue);color:white}
+.panel{display:none}
+.panel.active{display:block}
+.sr{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px}
+.sc{background:white;border:1px solid var(--border);border-radius:12px;padding:18px}
+.sc .num{font-size:26px;font-weight:900;color:var(--blue)}
+.sc .lbl{font-size:11px;color:var(--gray);font-weight:600;letter-spacing:1px;text-transform:uppercase;margin-top:3px}
+.card{background:white;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
+.ct{font-size:15px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.fg label{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px}
+.fg input,.fg textarea,.fg select{border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:'Inter',sans-serif;outline:none;color:var(--navy);transition:border-color .2s;background:white;width:100%}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--blue)}
+.fg textarea{resize:vertical;min-height:80px}
+.bs{background:var(--blue);color:white;border:none;padding:11px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.bs:hover{background:var(--navy)}
+.ok{color:var(--green);font-size:13px;margin-top:10px;display:none;font-weight:600}
+.il{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.li{display:flex;align-items:center;justify-content:space-between;background:var(--lg);border:1px solid var(--border);border-radius:10px;padding:12px 16px;gap:12px}
+.li-info{flex:1}
+.li-info h4{font-size:14px;font-weight:600;margin-bottom:2px}
+.li-info p{font-size:12px;color:var(--gray)}
+.bd{background:rgba(239,68,68,.1);color:var(--red);border:none;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap}
+.bd:hover{background:var(--red);color:white}
+.badge{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11px;font-weight:700;margin-left:6px}
+.bg{background:#dcfce7;color:#166534}
+.bb{background:var(--lb);color:var(--blue)}
+.by{background:#fef3c7;color:#92400e}
+.br{background:#fee2e2;color:#dc2626}
+.mav{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid var(--border);flex-shrink:0}
+.mav-p{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--blue));color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex-shrink:0}
+.pu{border:2px dashed var(--border);border-radius:10px;padding:18px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.pu:hover{border-color:var(--blue);background:var(--lb)}
+.pu input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.pu p{font-size:13px;color:var(--gray)}
+.pp{width:72px;height:72px;border-radius:50%;object-fit:cover;margin:8px auto 0;display:block;border:3px solid var(--lb)}
+.msg-box{background:var(--lg);border-radius:8px;padding:10px 14px;font-size:13px;color:#374151;line-height:1.6;margin-top:8px}
+.action-btn{background:var(--lb);color:var(--blue);border:none;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.cd-d{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.cd-b{background:var(--lg);border:1px solid var(--border);border-radius:12px;padding:14px 18px;text-align:center;min-width:65px}
+.cd-n{font-size:28px;font-weight:900;color:var(--navy)}
+.cd-l{font-size:10px;color:var(--gray);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+@media(max-width:768px){
+  .sb{width:100%;position:relative;height:auto;flex-direction:row;flex-wrap:wrap;padding:8px;gap:4px}
+  .sl{border-bottom:none;margin-bottom:0;padding:8px 12px}
+  .ns{display:none}
+  .ni{padding:7px 10px;border-left:none;border-radius:6px;font-size:11px}
+  .ni.active{border-left:none;background:rgba(59,158,255,.1)}
+  .sbm{width:100%;padding:8px}
+  .main{margin-left:0;padding:16px}
+  .fr{grid-template-columns:1fr}
+  .sr{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="lw" id="lw">
+  <div class="lb">
+    <img src="logo.png" alt="TalentVerse Bangladesh">
+    <h2>Admin Panel</h2>
+    <p>TalentVerse Bangladesh</p>
+    <input type="text" id="au" placeholder="Username" autocomplete="off">
+    <input type="password" id="ap" placeholder="Password">
+    <button onclick="login()">🔐 Login</button>
+    <p class="lerr" id="le">❌ ভুল Username বা Password!</p>
+  </div>
+</div>
+
+<div class="aw" id="aw">
+  <div class="sb">
+    <div class="sl"><img src="logo.png" alt=""><span>Talent<b>Verse</b></span></div>
+    <div class="ns">Main</div>
+    <div class="ni active" onclick="sp('dashboard',this)"><span class="ic">📊</span> Dashboard</div>
+    <div class="ns">Manage</div>
+    <div class="ni" onclick="sp('events',this)"><span class="ic">🏆</span> Events</div>
+    <div class="ni" onclick="sp('team',this)"><span class="ic">👥</span> Team Members</div>
+    <div class="ni" onclick="sp('certificates',this)"><span class="ic">🎖️</span> Certificates</div>
+    <div class="ns">Inbox</div>
+    <div class="ni" onclick="sp('applications',this)"><span class="ic">📝</span> Applications <span id="ab" style="background:#ef4444;color:white;border-radius:100px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:4px;display:none"></span></div>
+    <div class="ni" onclick="sp('messages',this)"><span class="ic">💬</span> Messages <span id="mb" style="background:#ef4444;color:white;border-radius:100px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:4px;display:none"></span></div>
+    <div class="ns">Chatbot</div>
+    <div class="ni" onclick="sp('chatbot',this)"><span class="ic">🤖</span> Chatbot Replies</div>
+    <div class="ns">Settings</div>
+    <div class="ni" onclick="sp('stats',this)"><span class="ic">📈</span> Site Stats</div>
+    <div class="ni" onclick="sp('countdown',this)"><span class="ic">⏳</span> Countdown</div>
+    <div class="sbm"><button class="lob" onclick="logout()">🚪 Logout</button></div>
+  </div>
+
+  <div class="main">
+    <div class="tb">
+      <div><h1 id="pt">Dashboard</h1><p>TalentVerse Bangladesh Admin Panel</p></div>
+      <a href="index.html" target="_blank" class="vs">🌐 View Website →</a>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="panel active" id="p-dashboard">
+      <div class="sr">
+        <div class="sc"><div class="num" id="d-ev">—</div><div class="lbl">Events</div></div>
+        <div class="sc"><div class="num" id="d-mb">—</div><div class="lbl">Members</div></div>
+        <div class="sc"><div class="num" id="d-ct">—</div><div class="lbl">Certificates</div></div>
+        <div class="sc"><div class="num" id="d-ap" style="color:#f59e0b">—</div><div class="lbl">New Applications</div></div>
+        <div class="sc"><div class="num" id="d-ms" style="color:#f59e0b">—</div><div class="lbl">New Messages</div></div>
+      </div>
+      <div class="card">
+        <div class="ct">👋 স্বাগতম, Admin!</div>
+        <p style="color:var(--gray);font-size:14px;line-height:1.8;">বাম মেনু থেকে যেকোনো অপশন সিলেক্ট করে ওয়েবসাইট আপডেট করুন। সব পরিবর্তন <strong>Real-time</strong> এ দেখাবে।</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">
+          <div onclick="sp('events',document.querySelectorAll('.ni')[2])" style="background:var(--lb);color:var(--blue);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">➕ Event</div>
+          <div onclick="sp('team',document.querySelectorAll('.ni')[3])" style="background:var(--lb);color:var(--blue);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">👤 Member</div>
+          <div onclick="sp('certificates',document.querySelectorAll('.ni')[4])" style="background:var(--lb);color:var(--blue);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">🎖️ Certificate</div>
+          <div onclick="sp('applications',document.querySelectorAll('.ni')[5])" style="background:#fef3c7;color:#92400e;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">📝 Applications</div>
+          <div onclick="sp('messages',document.querySelectorAll('.ni')[6])" style="background:#fef3c7;color:#92400e;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">💬 Messages</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="panel" id="p-events">
+      <div class="card">
+        <div class="ct">➕ নতুন Event যোগ করুন</div>
+        <div class="fr">
+          <div class="fg"><label>Event নাম *</label><input type="text" id="en" placeholder="Islamic Quiz Competition"></div>
+          <div class="fg"><label>Category</label><select id="ec"><option>Quiz</option><option>Talent Show</option><option>Workshop</option><option>Debate</option><option>Art</option><option>Leadership</option><option>Other</option></select></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>তারিখ</label><input type="text" id="ed" placeholder="2026 বা Coming Soon"></div>
+          <div class="fg"><label>প্ল্যাটফর্ম</label><select id="ep"><option>Online</option><option>Offline</option><option>Online & Offline</option></select></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>Status</label><select id="es"><option>Upcoming</option><option>Ongoing</option><option>Completed</option></select></div>
+          <div class="fg"><label>কালার</label><select id="ecl"><option value="linear-gradient(135deg,#0D1B40,#1A6BCC)">Navy Blue</option><option value="linear-gradient(135deg,#1a4080,#2563eb)">Royal Blue</option><option value="linear-gradient(135deg,#064e3b,#059669)">Green</option><option value="linear-gradient(135deg,#4c1d95,#7c3aed)">Purple</option><option value="linear-gradient(135deg,#7c2d12,#ea580c)">Orange</option><option value="linear-gradient(135deg,#134e4a,#0f766e)">Teal</option></select></div>
+        </div>
+        <div class="fg"><label>বিবরণ *</label><textarea id="edesc" placeholder="ইভেন্টের বিবরণ..."></textarea></div>
+        <button class="bs" onclick="addEvent()">➕ Event যোগ করুন</button>
+        <p class="ok" id="ev-ok">✅ Event যোগ হয়েছে!</p>
+      </div>
+      <div class="card"><div class="ct">📋 সকল Events</div><div class="il" id="events-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div></div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="panel" id="p-team">
+      <div class="card">
+        <div class="ct">➕ নতুন Member যোগ করুন</div>
+        <div class="fr">
+          <div class="fg"><label>পূর্ণ নাম *</label><input type="text" id="mn" placeholder="Mohammad Rahman"></div>
+          <div class="fg"><label>পদবী / Role *</label><input type="text" id="mr" placeholder="CEO & Founder"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>Initials (২ অক্ষর)</label><input type="text" id="mi" placeholder="MR" maxlength="2"></div>
+          <div class="fg"><label>Department</label><select id="md"><option>Leadership</option><option>Administration</option><option>IT</option><option>Creative</option><option>Cultural</option><option>Marketing</option><option>Content</option><option>Other</option></select></div>
+        </div>
+        <div class="fg"><label>ছবি আপলোড করুন</label>
+          <div class="pu" id="pu">
+            <input type="file" id="mf" accept="image/*" onchange="prevPhoto(this)">
+            <p id="pu-txt">📸 ছবি সিলেক্ট করতে ক্লিক করুন</p>
+            <img id="pp" class="pp" style="display:none">
+          </div>
+        </div>
+        <div class="fg"><label>সংক্ষিপ্ত পরিচয়</label><textarea id="mb2" placeholder="এই সদস্য সম্পর্কে..."></textarea></div>
+        <button class="bs" onclick="addMember()">➕ Member যোগ করুন</button>
+        <p class="ok" id="mb-ok">✅ Member যোগ হয়েছে!</p>
+      </div>
+      <div class="card"><div class="ct">👥 সকল Members</div><div class="il" id="members-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div></div>
+    </div>
+
+    <!-- CERTIFICATES -->
+    <div class="panel" id="p-certificates">
+      <div class="card">
+        <div class="ct">🎖️ নতুন Certificate যোগ করুন</div>
+        <div class="fr">
+          <div class="fg"><label>Certificate ID *</label><input type="text" id="ci" placeholder="TVB-2026-001" style="text-transform:uppercase"></div>
+          <div class="fg"><label>অংশগ্রহণকারীর নাম *</label><input type="text" id="cn" placeholder="Mohammad Rahman"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>ইভেন্ট</label><input type="text" id="ce" placeholder="Islamic Quiz Competition"></div>
+          <div class="fg"><label>তারিখ</label><input type="text" id="cd2" placeholder="2026"></div>
+        </div>
+        <div class="fg"><label>ক্যাটাগরি</label><select id="cc"><option>Participant</option><option>Winner</option><option>Runner-up</option><option>2nd Runner-up</option><option>Special Award</option></select></div>
+        <button class="bs" onclick="addCert()">➕ Certificate যোগ করুন</button>
+        <p class="ok" id="ct-ok">✅ Certificate যোগ হয়েছে!</p>
+      </div>
+      <div class="card"><div class="ct">📋 সকল Certificates</div><div class="il" id="certs-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div></div>
+    </div>
+
+    <!-- APPLICATIONS -->
+    <div class="panel" id="p-applications">
+      <div class="card">
+        <div class="ct">📝 Team Join Applications <span id="ap-count" style="font-size:13px;color:var(--gray);font-weight:400"></span></div>
+        <div class="il" id="apps-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div>
+      </div>
+    </div>
+
+    <!-- MESSAGES -->
+    <div class="panel" id="p-messages">
+      <div class="card">
+        <div class="ct">💬 Contact Messages <span id="ms-count" style="font-size:13px;color:var(--gray);font-weight:400"></span></div>
+        <div class="il" id="msgs-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div>
+      </div>
+    </div>
+
+    <!-- CHATBOT -->
+    <div class="panel" id="p-chatbot">
+      <div class="card">
+        <div class="ct">🤖 নতুন Chatbot Reply যোগ করুন</div>
+        <p style="color:var(--gray);font-size:13px;margin-bottom:16px;">Keywords দিয়ে TVBot কে শেখান কীভাবে উত্তর দিতে হবে।</p>
+        <div class="fr">
+          <div class="fg"><label>Keywords (comma দিয়ে আলাদা করুন) *</label><input type="text" id="cb-kw" placeholder="quiz,কুইজ,competition,প্রতিযোগিতা"></div>
+          <div class="fg"><label>ক্রম (Order)</label><input type="number" id="cb-order" placeholder="1" value="10"></div>
+        </div>
+        <div class="fg"><label>Reply / উত্তর *</label><textarea id="cb-reply" placeholder="🏆 আমাদের Events সম্পর্কে জানতে..." style="min-height:120px;"></textarea></div>
+        <button class="bs" onclick="addChatbotReply()">➕ Reply যোগ করুন</button>
+        <p class="ok" id="cb-ok">✅ Reply যোগ হয়েছে!</p>
+      </div>
+      <div class="card">
+        <div class="ct">📋 সকল Chatbot Replies</div>
+        <p style="color:var(--gray);font-size:13px;margin-bottom:12px;">এই replies গুলো TVBot ব্যবহার করবে। Default replies সবসময় থাকবে।</p>
+        <div class="il" id="chatbot-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="panel" id="p-stats">
+      <div class="card">
+        <div class="ct">📈 Website Stats আপডেট করুন</div>
+        <p style="color:var(--gray);font-size:13px;margin-bottom:16px;">এই তথ্য Home পেজে দেখাবে।</p>
+        <div class="fr">
+          <div class="fg"><label>Participants</label><input type="text" id="sp" placeholder="500+"></div>
+          <div class="fg"><label>Members</label><input type="text" id="sm" placeholder="50+"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>Events</label><input type="text" id="se" placeholder="5+"></div>
+          <div class="fg"><label>Established</label><input type="text" id="sy" placeholder="2026"></div>
+        </div>
+        <button class="bs" onclick="saveStats()">💾 আপডেট করুন</button>
+        <p class="ok" id="st-ok">✅ Stats আপডেট হয়েছে!</p>
+      </div>
+    </div>
+
+    <!-- COUNTDOWN -->
+    <div class="panel" id="p-countdown">
+      <div class="card">
+        <div class="ct">⏳ Countdown Timer সেট করুন</div>
+        <p style="color:var(--gray);font-size:13px;margin-bottom:16px;">Events পেজে দেখাবে।</p>
+        <div class="fr">
+          <div class="fg"><label>ইভেন্টের নাম</label><input type="text" id="cdn" placeholder="Next Big Event"></div>
+          <div class="fg"><label>তারিখ ও সময়</label><input type="datetime-local" id="cdd"></div>
+        </div>
+        <button class="bs" onclick="saveCD()">💾 Countdown সেট করুন</button>
+        <p class="ok" id="cd-ok">✅ Countdown সেট হয়েছে!</p>
+        <div style="margin-top:20px;background:var(--lg);border-radius:12px;padding:20px;text-align:center;">
+          <p style="font-size:13px;color:var(--gray);margin-bottom:4px;">Preview</p>
+          <p id="cd-nm" style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;">—</p>
+          <div class="cd-d">
+            <div class="cd-b"><div class="cd-n" id="pv-d">00</div><div class="cd-l">Days</div></div>
+            <div class="cd-b"><div class="cd-n" id="pv-h">00</div><div class="cd-l">Hours</div></div>
+            <div class="cd-b"><div class="cd-n" id="pv-m">00</div><div class="cd-l">Mins</div></div>
+            <div class="cd-b"><div class="cd-n" id="pv-s" style="color:var(--blue)">00</div><div class="cd-l">Secs</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const app = initializeApp({ apiKey:"AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c", authDomain:"talentverse-bd-b072c.firebaseapp.com", databaseURL:"https://talentverse-bd-b072c-default-rtdb.firebaseio.com", projectId:"talentverse-bd-b072c", storageBucket:"talentverse-bd-b072c.firebasestorage.app", messagingSenderId:"304686688553", appId:"1:304686688553:web:0a887b8fc517e24d00af38" });
+const db = getDatabase(app);
+
+const titles = {dashboard:'Dashboard',chatbot:'Chatbot Replies',events:'Events',team:'Team Members',certificates:'Certificates',applications:'Applications',messages:'Messages',stats:'Site Stats',countdown:'Countdown Timer'};
+
+window.login = function() {
+  if(document.getElementById('au').value==='admin' && document.getElementById('ap').value==='tvbd2026') {
+    document.getElementById('lw').style.display='none';
+    document.getElementById('aw').style.display='flex';
+  } else { document.getElementById('le').style.display='block'; }
+}
+window.logout = function() { document.getElementById('lw').style.display='flex'; document.getElementById('aw').style.display='none'; }
+document.getElementById('ap').addEventListener('keydown',e=>{ if(e.key==='Enter') window.login(); });
+
+window.sp = function(name,el) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('p-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('pt').textContent = titles[name]||name;
+}
+
+function ok(id) { document.getElementById(id).style.display='block'; setTimeout(()=>document.getElementById(id).style.display='none',3000); }
+
+// PHOTO
+window.prevPhoto = function(input) {
+  if(!input.files[0]) return;
+  const r=new FileReader();
+  r.onload=e=>{ const img=document.getElementById('pp'); img.src=e.target.result; img.style.display='block'; document.getElementById('pu-txt').textContent='✅ ছবি সিলেক্ট হয়েছে'; };
+  r.readAsDataURL(input.files[0]);
+}
+
+// EVENTS
+window.addEvent = function() {
+  const ev={name:document.getElementById('en').value.trim(),category:document.getElementById('ec').value,date:document.getElementById('ed').value,platform:document.getElementById('ep').value,status:document.getElementById('es').value,color:document.getElementById('ecl').value,desc:document.getElementById('edesc').value.trim(),createdAt:Date.now()};
+  if(!ev.name||!ev.desc){alert('নাম ও বিবরণ দিন!');return;}
+  push(ref(db,'events'),ev).then(()=>{ ok('ev-ok'); ['en','ed','edesc'].forEach(i=>document.getElementById(i).value=''); });
+}
+window.deleteEvent = function(k){if(confirm('মুছবেন?'))remove(ref(db,'events/'+k));}
+
+onValue(ref(db,'events'),snap=>{
+  const list=document.getElementById('events-list');
+  if(!snap.exists()){list.innerHTML='<p style="color:var(--gray)">কোনো Event নেই।</p>';document.getElementById('d-ev').textContent='0';return;}
+  const data=snap.val();const keys=Object.keys(data).reverse();
+  document.getElementById('d-ev').textContent=keys.length;
+  const bc=s=>s==='Completed'?'bg':s==='Ongoing'?'by':'bb';
+  list.innerHTML=keys.map(k=>`<div class="li"><div class="li-info"><h4>${data[k].name}<span class="badge ${bc(data[k].status)}">${data[k].status}</span></h4><p>${data[k].category} · ${data[k].date} · ${data[k].platform}</p></div><button class="bd" onclick="window.deleteEvent('${k}')">🗑</button></div>`).join('');
+});
+
+// TEAM
+window.addMember = function() {
+  const file=document.getElementById('mf').files[0];
+  const init=(document.getElementById('mi').value||document.getElementById('mn').value.substring(0,2)).toUpperCase();
+  const save=(photo='')=>{
+    const m={name:document.getElementById('mn').value.trim(),role:document.getElementById('mr').value.trim(),initials:init,dept:document.getElementById('md').value,bio:document.getElementById('mb2').value.trim(),photo,createdAt:Date.now()};
+    if(!m.name||!m.role){alert('নাম ও পদবী দিন!');return;}
+    push(ref(db,'members'),m).then(()=>{
+      ok('mb-ok');
+      ['mn','mr','mi','mb2'].forEach(i=>document.getElementById(i).value='');
+      document.getElementById('pp').style.display='none';
+      document.getElementById('pu-txt').textContent='📸 ছবি সিলেক্ট করতে ক্লিক করুন';
+      document.getElementById('mf').value='';
+    });
+  };
+  if(file){const r=new FileReader();r.onload=e=>save(e.target.result);r.readAsDataURL(file);}
+  else save();
+}
+window.deleteMember = function(k){if(confirm('মুছবেন?'))remove(ref(db,'members/'+k));}
+
+onValue(ref(db,'members'),snap=>{
+  const list=document.getElementById('members-list');
+  if(!snap.exists()){list.innerHTML='<p style="color:var(--gray)">কোনো Member নেই।</p>';document.getElementById('d-mb').textContent='0';return;}
+  const data=snap.val();const keys=Object.keys(data);
+  document.getElementById('d-mb').textContent=keys.length;
+  list.innerHTML=keys.map(k=>{
+    const m=data[k];
+    const av=m.photo?`<img src="${m.photo}" class="mav">`:`<div class="mav-p">${m.initials||'?'}</div>`;
+    return `<div class="li">${av}<div class="li-info"><h4>${m.name}<span class="badge bb">${m.dept}</span></h4><p>${m.role}</p></div><button class="bd" onclick="window.deleteMember('${k}')">🗑</button></div>`;
+  }).join('');
+});
+
+// CERTIFICATES
+window.addCert = function() {
+  const id=document.getElementById('ci').value.trim().toUpperCase().replace(/[^A-Z0-9\-]/g,'_');
+  const c={name:document.getElementById('cn').value.trim(),event:document.getElementById('ce').value.trim(),date:document.getElementById('cd2').value.trim(),category:document.getElementById('cc').value};
+  if(!id||!c.name){alert('ID ও নাম দিন!');return;}
+  set(ref(db,'certificates/'+id),c).then(()=>{ ok('ct-ok'); ['ci','cn','ce','cd2'].forEach(i=>document.getElementById(i).value=''); });
+}
+window.deleteCert = function(k){if(confirm('মুছবেন?'))remove(ref(db,'certificates/'+k));}
+
+onValue(ref(db,'certificates'),snap=>{
+  const list=document.getElementById('certs-list');
+  if(!snap.exists()){list.innerHTML='<p style="color:var(--gray)">কোনো Certificate নেই।</p>';document.getElementById('d-ct').textContent='0';return;}
+  const data=snap.val();const keys=Object.keys(data);
+  document.getElementById('d-ct').textContent=keys.length;
+  list.innerHTML=keys.map(k=>`<div class="li"><div class="li-info"><h4>${k.replace(/_/g,'-')}<span class="badge bg">${data[k].category}</span></h4><p>${data[k].name} · ${data[k].event} · ${data[k].date}</p></div><button class="bd" onclick="window.deleteCert('${k}')">🗑</button></div>`).join('');
+});
+
+// APPLICATIONS
+onValue(ref(db,'applications'),snap=>{
+  const list=document.getElementById('apps-list');
+  const badge=document.getElementById('ab');
+  const count=document.getElementById('ap-count');
+  if(!snap.exists()){list.innerHTML='<p style="color:var(--gray)">কোনো Application নেই।</p>';badge.style.display='none';document.getElementById('d-ap').textContent='0';return;}
+  const data=snap.val();const keys=Object.keys(data).reverse();
+  const pending=keys.filter(k=>data[k].status==='pending').length;
+  badge.textContent=pending;badge.style.display=pending>0?'inline':'none';
+  document.getElementById('d-ap').textContent=pending;
+  count.textContent=`(${keys.length} টি)`;
+  list.innerHTML=keys.map(k=>{
+    const a=data[k];const isNew=a.status==='pending';
+    return `<div class="li" style="flex-direction:column;align-items:flex-start;gap:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+        <div class="li-info"><h4>${a.name}<span class="badge ${isNew?'by':'bg'}">${isNew?'নতুন':'দেখা হয়েছে'}</span></h4><p>${a.role} · ${a.date||''}</p></div>
+        <button class="bd" onclick="window.delApp('${k}')">🗑</button>
+      </div>
+      <div class="msg-box">📞 ${a.phone||'—'} ${a.email?'· ✉️ '+a.email:''} ${a.district?'· 📍 '+a.district:''}<br>💬 ${a.about||'—'}</div>
+      ${isNew?`<button class="action-btn" onclick="window.readApp('${k}')">✅ দেখা হয়েছে</button>`:''}
+    </div>`;
+  }).join('');
+});
+window.delApp=k=>{if(confirm('মুছবেন?'))remove(ref(db,'applications/'+k));}
+window.readApp=k=>set(ref(db,'applications/'+k+'/status'),'read');
+
+// MESSAGES
+onValue(ref(db,'messages'),snap=>{
+  const list=document.getElementById('msgs-list');
+  const badge=document.getElementById('mb');
+  const count=document.getElementById('ms-count');
+  if(!snap.exists()){list.innerHTML='<p style="color:var(--gray)">কোনো Message নেই।</p>';badge.style.display='none';document.getElementById('d-ms').textContent='0';return;}
+  const data=snap.val();const keys=Object.keys(data).reverse();
+  const unread=keys.filter(k=>data[k].status==='unread').length;
+  badge.textContent=unread;badge.style.display=unread>0?'inline':'none';
+  document.getElementById('d-ms').textContent=unread;
+  count.textContent=`(${keys.length} টি)`;
+  list.innerHTML=keys.map(k=>{
+    const m=data[k];const isNew=m.status==='unread';
+    return `<div class="li" style="flex-direction:column;align-items:flex-start;gap:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+        <div class="li-info"><h4>${m.name}<span class="badge ${isNew?'by':'bg'}">${isNew?'নতুন':'পড়া হয়েছে'}</span></h4><p>${m.subject||'—'} · ${m.date||''}</p></div>
+        <button class="bd" onclick="window.delMsg('${k}')">🗑</button>
+      </div>
+      <div class="msg-box">${m.phone?'📞 '+m.phone+' · ':''}${m.email?'✉️ '+m.email+'<br>':''}💬 ${m.message||'—'}</div>
+      ${isNew?`<button class="action-btn" onclick="window.readMsg('${k}')">✅ পড়া হয়েছে</button>`:''}
+    </div>`;
+  }).join('');
+});
+
+// CHATBOT REPLIES
+window.addChatbotReply = function() {
+  const kw = document.getElementById('cb-kw').value.trim();
+  const reply = document.getElementById('cb-reply').value.trim();
+  const order = parseInt(document.getElementById('cb-order').value) || 10;
+  if(!kw || !reply) { alert('Keywords ও Reply দিন!'); return; }
+  push(ref(db,'chatbot_responses'), { keywords: kw, reply, order, createdAt: Date.now() }).then(() => {
+    ok('cb-ok');
+    document.getElementById('cb-kw').value = '';
+    document.getElementById('cb-reply').value = '';
+  });
+}
+window.deleteChatbotReply = function(k) { if(confirm('মুছবেন?')) remove(ref(db,'chatbot_responses/'+k)); }
+
+onValue(ref(db,'chatbot_responses'), snap => {
+  const list = document.getElementById('chatbot-list');
+  if(!list) return;
+  if(!snap.exists()) { list.innerHTML = '<p style="color:var(--gray)">কোনো Custom Reply নেই। Default replies কাজ করছে।</p>'; return; }
+  const data = snap.val();
+  const keys = Object.keys(data);
+  list.innerHTML = keys.map(k => {
+    const r = data[k];
+    return `<div class="li" style="flex-direction:column;align-items:flex-start;gap:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+        <div class="li-info"><h4>Keywords: ${r.keywords}</h4><p>Order: ${r.order||0}</p></div>
+        <button class="bd" onclick="window.deleteChatbotReply('${k}')">🗑</button>
+      </div>
+      <div class="msg-box" style="background:var(--lg);border-radius:8px;padding:10px;font-size:13px;width:100%;white-space:pre-wrap;">${r.reply}</div>
+    </div>`;
+  }).join('');
+});
+
+window.delMsg=k=>{if(confirm('মুছবেন?'))remove(ref(db,'messages/'+k));}
+window.readMsg=k=>set(ref(db,'messages/'+k+'/status'),'read');
+
+// STATS
+window.saveStats=function(){
+  const s={participants:document.getElementById('sp').value,members:document.getElementById('sm').value,events:document.getElementById('se').value,estd:document.getElementById('sy').value};
+  set(ref(db,'stats'),s).then(()=>ok('st-ok'));
+}
+onValue(ref(db,'stats'),snap=>{
+  if(!snap.exists())return;const s=snap.val();
+  if(s.participants)document.getElementById('sp').value=s.participants;
+  if(s.members)document.getElementById('sm').value=s.members;
+  if(s.events)document.getElementById('se').value=s.events;
+  if(s.estd)document.getElementById('sy').value=s.estd;
+});
+
+// COUNTDOWN
+let cdt;
+function startCD(target,name) {
+  document.getElementById('cd-nm').textContent=name;
+  if(cdt)clearInterval(cdt);
+  cdt=setInterval(()=>{
+    const diff=target-Date.now();
+    if(diff<=0){['pv-d','pv-h','pv-m','pv-s'].forEach(i=>document.getElementById(i).textContent='00');return;}
+    document.getElementById('pv-d').textContent=String(Math.floor(diff/86400000)).padStart(2,'0');
+    document.getElementById('pv-h').textContent=String(Math.floor((diff%86400000)/3600000)).padStart(2,'0');
+    document.getElementById('pv-m').textContent=String(Math.floor((diff%3600000)/60000)).padStart(2,'0');
+    document.getElementById('pv-s').textContent=String(Math.floor((diff%60000)/1000)).padStart(2,'0');
+  },1000);
+}
+window.saveCD=function(){
+  const name=document.getElementById('cdn').value;const dateVal=document.getElementById('cdd').value;
+  if(!name||!dateVal){alert('নাম ও তারিখ দিন!');return;}
+  const ts=new Date(dateVal).getTime();
+  set(ref(db,'countdown'),{name,date:ts}).then(()=>{ok('cd-ok');startCD(ts,name);});
+}
+onValue(ref(db,'countdown'),snap=>{
+  if(snap.exists()){const c=snap.val();if(document.getElementById('cdn'))document.getElementById('cdn').value=c.name;startCD(c.date,c.name);}
+});
+</script>
+</body>
+</html>
