@@ -48,6 +48,7 @@
     <li><a href="team.html">Executive Panel</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li><a href="verify.html">🎖️ Verify</a></li>
+    <li><a href="register.html">📝 Register</a></li>
     <li><a href="join.html" class="nav-cta">Join Our Team</a></li>
   </ul>
   <button class="hamburger" onclick="toggleMenu()">☰</button>
@@ -56,6 +57,7 @@
   <a href="index.html">🏠 Home</a><a href="about.html">ℹ️ About</a>
   <a href="events.html">🏆 Events</a><a href="team.html">👥 Executive Panel</a>
   <a href="contact.html">📬 Contact</a><a href="verify.html">🎖️ Certificate Verify</a>
+  <a href="register.html">📝 Event Register</a>
   <a href="join.html">🤝 Join Our Team</a>
 </div>
 
@@ -225,7 +227,7 @@ function quickMsg(btn){document.getElementById("chatInput").value=btn.textConten
 function addMsg(text,isUser){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg "+(isUser?"user":"bot");if(isUser){div.innerHTML=`<div class="msg-av-u">আ</div><div class="msg-bubble">${text}</div>`;}else{div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="msg-bubble">${text.replace(/\n/g,"<br>")}</div>`;}msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
 function showTyping(){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg bot";div.id="typing";div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="typing"><span></span><span></span><span></span></div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
 function removeTyping(){const t=document.getElementById("typing");if(t)t.remove();}
-async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.sendMessage(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, সমস্যা হয়েছে। WhatsApp: +8801634428536",false);}btn.disabled=false;input.focus();}
+async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.getReply(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, সমস্যা হয়েছে। WhatsApp: +8801634428536",false);}btn.disabled=false;input.focus();}
 setTimeout(()=>{if(!chatOpen)document.getElementById("chat-badge").style.display="flex";},3000);
 </script>
 

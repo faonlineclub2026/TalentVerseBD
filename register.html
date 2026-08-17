@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Event Registration — TalentVerse Bangladesh</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="chatbot.css">
+<style>
+.reg-wrap{max-width:680px;margin:0 auto}
+.reg-card{background:white;border:1px solid var(--border);border-radius:20px;padding:40px;margin-bottom:24px}
+.reg-header{background:linear-gradient(135deg,var(--navy),var(--blue));border-radius:16px;padding:32px;text-align:center;color:white;margin-bottom:28px}
+.reg-header h2{font-family:'Playfair Display',serif;font-size:26px;margin-bottom:8px}
+.reg-header p{font-size:14px;opacity:.75}
+.event-select{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.event-opt{border:2px solid var(--border);border-radius:12px;padding:14px 16px;cursor:pointer;transition:all .2s;text-align:center}
+.event-opt:hover{border-color:var(--blue);background:var(--light-blue)}
+.event-opt.selected{border-color:var(--blue);background:var(--light-blue)}
+.event-opt .ev-icon{font-size:24px;margin-bottom:6px}
+.event-opt .ev-name{font-size:13px;font-weight:700;color:var(--navy)}
+.event-opt .ev-date{font-size:11px;color:var(--gray);margin-top:2px}
+.field-group{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.field-item{display:flex;flex-direction:column;gap:6px}
+.field-item label{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:1px}
+.field-item input,.field-item select,.field-item textarea{border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;font-size:14px;font-family:'Inter',sans-serif;outline:none;color:var(--navy);transition:border-color .2s;width:100%}
+.field-item input:focus,.field-item select:focus,.field-item textarea:focus{border-color:var(--blue)}
+.field-item textarea{resize:vertical;min-height:80px}
+.submit-btn{width:100%;background:linear-gradient(135deg,var(--navy),var(--blue));color:white;border:none;padding:16px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .2s;margin-top:8px}
+.submit-btn:hover{opacity:.9}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.success-wrap{text-align:center;padding:48px 20px;display:none}
+.success-icon{font-size:64px;margin-bottom:16px}
+.success-wrap h3{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px;color:var(--navy)}
+.success-wrap p{color:var(--gray);font-size:14px;line-height:1.7;margin-bottom:24px}
+.reg-id{background:var(--light-blue);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:13px;color:var(--blue);font-weight:700;letter-spacing:1px;margin:16px 0}
+.info-box{background:var(--light-gray);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;font-size:13px;color:var(--gray);line-height:1.7}
+.required{color:var(--red)}
+@media(max-width:600px){.event-select{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="index.html" class="nav-logo"><img src="logo.png" alt="TalentVerse Bangladesh"><span>Talent<b>Verse</b></span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="team.html">Executive Panel</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="verify.html">🎖️ Verify</a></li>
+    <li><a href="join.html" class="nav-cta">Join Our Team</a></li>
+  </ul>
+  <button class="hamburger" onclick="toggleMenu()">☰</button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">🏠 Home</a>
+  <a href="about.html">ℹ️ About</a>
+  <a href="events.html">🏆 Events</a>
+  <a href="team.html">👥 Executive Panel</a>
+  <a href="contact.html">📬 Contact</a>
+  <a href="verify.html">🎖️ Certificate Verify</a>
+  <a href="register.html">📝 Register</a>
+  <a href="join.html">🤝 Join Our Team</a>
+</div>
+
+<div class="page-hero">
+  <h1>Event Registration 📝</h1>
+  <p>TalentVerse Bangladesh এর ইভেন্টে অংশগ্রহণ করুন।</p>
+</div>
+
+<section style="background:var(--light-gray);">
+  <div class="reg-wrap">
+
+    <div class="reg-card" id="regForm">
+      <div class="reg-header">
+        <div style="font-size:40px;margin-bottom:12px;">🏆</div>
+        <h2>Event Registration</h2>
+        <p>নিচের form টি পূরণ করুন</p>
+      </div>
+
+      <!-- Event Selection -->
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:14px;">ইভেন্ট সিলেক্ট করুন <span class="required">*</span></h3>
+      <div class="event-select" id="eventSelect">
+        <p style="color:var(--gray);font-size:13px;">লোড হচ্ছে...</p>
+      </div>
+
+      <div class="info-box" id="eventInfo" style="display:none">
+        <strong id="selectedEventName">—</strong><br>
+        <span id="selectedEventDetails">—</span>
+      </div>
+
+      <!-- Dynamic Fields -->
+      <div class="field-group" id="fieldGroup">
+        <!-- Loaded from Firebase -->
+      </div>
+
+      <button class="submit-btn" onclick="submitReg()" id="submitBtn">
+        📝 Registration করুন
+      </button>
+    </div>
+
+    <!-- Success -->
+    <div class="reg-card success-wrap" id="successWrap">
+      <div class="success-icon">🎉</div>
+      <h3>Registration সফল হয়েছে!</h3>
+      <p>আপনার registration সফলভাবে জমা হয়েছে।<br>আমরা শীঘ্রই WhatsApp বা Email এ যোগাযোগ করব।</p>
+      <div class="reg-id" id="regIdBox">Registration ID: —</div>
+      <p style="font-size:13px;color:var(--gray);">এই ID টি সংরক্ষণ করুন।</p>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:24px;flex-wrap:wrap;">
+        <a href="events.html" class="btn-blue" style="padding:12px 24px;font-size:14px;">🏆 Events দেখুন</a>
+        <a href="index.html" class="btn-blue" style="padding:12px 24px;font-size:14px;">🏠 Home</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><img src="logo.png" alt="TalentVerse Bangladesh"><div><h4>TalentVerse Bangladesh</h4><p>Where Talent Meets Opportunity</p></div></div>
+    <div class="footer-links"><h5>Quick Links</h5><a href="index.html">Home</a><a href="events.html">Events</a><a href="register.html">Register</a><a href="verify.html">Certificate Verify</a><a href="join.html">Join Our Team</a></div>
+    <div class="footer-contact"><h5>Contact</h5><p>📍 Bangladesh</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/share/18HcL7fN3C/" target="_blank">📘 Facebook</a>
+        <a href="https://www.instagram.com/talentverse.bangladesh07" target="_blank">📸 Instagram</a>
+        <a href="https://wa.me/8801634428536" target="_blank">💬 WhatsApp</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 TalentVerse Bangladesh. All Rights Reserved.</p></div>
+</footer>
+
+<script src="script.js"></script>
+<script src="chatbot.js"></script>
+
+<!-- Chatbot -->
+<button class="chat-btn" onclick="toggleChat()" title="TVBot">🤖<span class="chat-badge" id="chat-badge" style="display:none">1</span></button>
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header">
+    <img src="logo.png" alt="TVBot" class="chat-header-av">
+    <div class="chat-header-info"><h4>TVBot 🤖</h4><p>Online · TalentVerse Bangladesh</p></div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot"><img src="logo.png" alt="" class="msg-av"><div><div class="msg-bubble">আস্সালামু আলাইকুম! 👋 Registration নিয়ে কোনো প্রশ্ন আছে?</div></div></div>
+  </div>
+  <div class="chat-input">
+    <textarea id="chatInput" placeholder="বার্তা লিখুন..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="chat-send" id="sendBtn" onclick="handleSend()">➤</button>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const app = initializeApp({ apiKey:"AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c", authDomain:"talentverse-bd-b072c.firebaseapp.com", databaseURL:"https://talentverse-bd-b072c-default-rtdb.firebaseio.com", projectId:"talentverse-bd-b072c", storageBucket:"talentverse-bd-b072c.firebasestorage.app", messagingSenderId:"304686688553", appId:"1:304686688553:web:0a887b8fc517e24d00af38" });
+const db = getDatabase(app);
+
+let selectedEvent = null;
+let formFields = [];
+
+// Default fields if not set in Firebase
+const defaultFields = [
+  { id: 'name', label: 'পূর্ণ নাম', type: 'text', placeholder: 'আপনার পূর্ণ নাম লিখুন', required: true },
+  { id: 'phone', label: 'মোবাইল নম্বর', type: 'tel', placeholder: '01XXXXXXXXX', required: true },
+  { id: 'email', label: 'ইমেইল', type: 'email', placeholder: 'example@gmail.com', required: false },
+  { id: 'age', label: 'বয়স', type: 'number', placeholder: 'আপনার বয়স', required: false },
+  { id: 'district', label: 'জেলা', type: 'text', placeholder: 'আপনার জেলার নাম', required: true },
+  { id: 'education', label: 'শিক্ষাগত যোগ্যতা', type: 'text', placeholder: 'যেমন: SSC, HSC, Degree', required: false },
+  { id: 'experience', label: 'পূর্ব অভিজ্ঞতা', type: 'textarea', placeholder: 'এই বিষয়ে আগে কোনো অভিজ্ঞতা থাকলে লিখুন...', required: false },
+];
+
+// Load events from Firebase
+onValue(ref(db, 'events'), snap => {
+  const container = document.getElementById('eventSelect');
+  if(!snap.exists()) {
+    container.innerHTML = '<p style="color:var(--gray)">কোনো ইভেন্ট নেই।</p>';
+    return;
+  }
+  const data = snap.val();
+  const upcoming = Object.entries(data).filter(([k,e]) => e.status !== 'Completed');
+  if(upcoming.length === 0) {
+    container.innerHTML = '<p style="color:var(--gray)">কোনো আসন্ন ইভেন্ট নেই।</p>';
+    return;
+  }
+  container.innerHTML = upcoming.map(([k,e]) => `
+    <div class="event-opt" onclick="selectEvent('${k}','${e.name}','${e.date}','${e.platform}')" id="ev-${k}">
+      <div class="ev-icon">🏆</div>
+      <div class="ev-name">${e.name}</div>
+      <div class="ev-date">${e.date} · ${e.platform}</div>
+    </div>`).join('');
+});
+
+// Load form fields from Firebase
+onValue(ref(db, 'reg_fields'), snap => {
+  if(snap.exists()) {
+    formFields = Object.values(snap.val()).sort((a,b) => (a.order||0)-(b.order||0));
+  } else {
+    formFields = defaultFields;
+  }
+  renderFields();
+});
+
+window.selectEvent = function(id, name, date, platform) {
+  selectedEvent = { id, name, date, platform };
+  document.querySelectorAll('.event-opt').forEach(el => el.classList.remove('selected'));
+  document.getElementById('ev-'+id).classList.add('selected');
+  document.getElementById('eventInfo').style.display = 'block';
+  document.getElementById('selectedEventName').textContent = name;
+  document.getElementById('selectedEventDetails').textContent = date + ' · ' + platform;
+}
+
+function renderFields() {
+  const group = document.getElementById('fieldGroup');
+  group.innerHTML = formFields.map(f => {
+    const req = f.required ? '<span class="required">*</span>' : '';
+    let input = '';
+    if(f.type === 'textarea') {
+      input = `<textarea id="rf-${f.id}" placeholder="${f.placeholder||''}"></textarea>`;
+    } else if(f.type === 'select' && f.options) {
+      const opts = f.options.split(',').map(o => `<option value="${o.trim()}">${o.trim()}</option>`).join('');
+      input = `<select id="rf-${f.id}"><option value="" disabled selected>${f.placeholder||'সিলেক্ট করুন'}</option>${opts}</select>`;
+    } else {
+      input = `<input type="${f.type||'text'}" id="rf-${f.id}" placeholder="${f.placeholder||''}">`;
+    }
+    return `<div class="field-item"><label>${f.label} ${req}</label>${input}</div>`;
+  }).join('');
+}
+
+window.submitReg = async function() {
+  if(!selectedEvent) { alert('ইভেন্ট সিলেক্ট করুন!'); return; }
+
+  const data = { event: selectedEvent, submittedAt: Date.now(), date: new Date().toLocaleDateString('bn-BD'), status: 'pending' };
+  let valid = true;
+
+  formFields.forEach(f => {
+    const el = document.getElementById('rf-'+f.id);
+    if(el) {
+      if(f.required && !el.value.trim()) { el.style.borderColor = '#ef4444'; valid = false; }
+      else { el.style.borderColor = ''; data[f.id] = el.value.trim(); }
+    }
+  });
+
+  if(!valid) { alert('সকল * চিহ্নিত তথ্য দিন!'); return; }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = '⏳ জমা হচ্ছে...';
+
+  const result = await push(ref(db, 'registrations'), data);
+  const regId = 'TVB-REG-' + result.key.substring(0,6).toUpperCase();
+  await set(ref(db, 'registrations/'+result.key+'/regId'), regId);
+
+  document.getElementById('regForm').style.display = 'none';
+  document.getElementById('successWrap').style.display = 'block';
+  document.getElementById('regIdBox').textContent = 'Registration ID: ' + regId;
+}
+</script>
+
+<script>
+let chatOpen=false;
+function toggleChat(){chatOpen=!chatOpen;document.getElementById("chatWindow").classList.toggle("open",chatOpen);document.getElementById("chat-badge").style.display="none";}
+function autoResize(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,80)+"px";}
+function handleKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleSend();}}
+function addMsg(text,isUser){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg "+(isUser?"user":"bot");if(isUser){div.innerHTML=`<div class="msg-av-u">আ</div><div class="msg-bubble">${text}</div>`;}else{div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="msg-bubble">${text.replace(/\n/g,"<br>")}</div>`;}msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function showTyping(){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg bot";div.id="typing";div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="typing"><span></span><span></span><span></span></div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function removeTyping(){const t=document.getElementById("typing");if(t)t.remove();}
+async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.getReply(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, WhatsApp: +8801634428536",false);}btn.disabled=false;}
+setTimeout(()=>{if(!chatOpen)document.getElementById("chat-badge").style.display="flex";},3000);
+</script>
+</body>
+</html>

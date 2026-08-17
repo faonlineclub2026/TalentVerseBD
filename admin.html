@@ -120,6 +120,9 @@ body{font-family:'Inter',sans-serif;background:var(--lg);color:var(--navy)}
     <div class="ns">Inbox</div>
     <div class="ni" onclick="sp('applications',this)"><span class="ic">📝</span> Applications <span id="ab" style="background:#ef4444;color:white;border-radius:100px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:4px;display:none"></span></div>
     <div class="ni" onclick="sp('messages',this)"><span class="ic">💬</span> Messages <span id="mb" style="background:#ef4444;color:white;border-radius:100px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:4px;display:none"></span></div>
+    <div class="ns">Registration</div>
+    <div class="ni" onclick="sp('registrations',this)"><span class="ic">📝</span> Registrations <span id="rb" style="background:#ef4444;color:white;border-radius:100px;padding:1px 7px;font-size:11px;font-weight:700;margin-left:4px;display:none"></span></div>
+    <div class="ni" onclick="sp('reg_fields',this)"><span class="ic">⚙️</span> Form Fields</div>
     <div class="ns">Chatbot</div>
     <div class="ni" onclick="sp('chatbot',this)"><span class="ic">🤖</span> Chatbot Replies</div>
     <div class="ns">Settings</div>
@@ -240,6 +243,43 @@ body{font-family:'Inter',sans-serif;background:var(--lg);color:var(--navy)}
       </div>
     </div>
 
+    <!-- REGISTRATIONS -->
+    <div class="panel" id="p-registrations">
+      <div class="card">
+        <div class="ct">📝 Event Registrations <span id="reg-count" style="font-size:13px;color:var(--gray);font-weight:400"></span></div>
+        <div class="il" id="reg-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div>
+      </div>
+    </div>
+
+    <!-- FORM FIELDS -->
+    <div class="panel" id="p-reg_fields">
+      <div class="card">
+        <div class="ct">⚙️ নতুন Form Field যোগ করুন</div>
+        <p style="color:var(--gray);font-size:13px;margin-bottom:16px;">Registration Form এ কী কী তথ্য নেওয়া হবে তা এখানে সেট করুন।</p>
+        <div class="fr">
+          <div class="fg"><label>Field ID (ইংরেজি) *</label><input type="text" id="ff-id" placeholder="name, phone, age..."></div>
+          <div class="fg"><label>Label (বাংলা) *</label><input type="text" id="ff-label" placeholder="পূর্ণ নাম, মোবাইল..."></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>Field Type</label><select id="ff-type"><option value="text">Text</option><option value="tel">Phone</option><option value="email">Email</option><option value="number">Number</option><option value="textarea">Textarea</option><option value="select">Dropdown</option></select></div>
+          <div class="fg"><label>ক্রম (Order)</label><input type="number" id="ff-order" value="10" placeholder="1-100"></div>
+        </div>
+        <div class="fg"><label>Placeholder</label><input type="text" id="ff-placeholder" placeholder="আপনার নাম লিখুন..."></div>
+        <div class="fg"><label>Dropdown Options (comma দিয়ে আলাদা করুন)</label><input type="text" id="ff-options" placeholder="Option 1, Option 2, Option 3"></div>
+        <div class="fg" style="flex-direction:row;align-items:center;gap:10px;margin-top:4px;">
+          <input type="checkbox" id="ff-required" style="width:auto;"> 
+          <label for="ff-required" style="text-transform:none;letter-spacing:0;font-size:14px;font-weight:600;">Required (আবশ্যিক)</label>
+        </div>
+        <button class="bs" onclick="addField()" style="margin-top:12px;">➕ Field যোগ করুন</button>
+        <p class="ok" id="ff-ok">✅ Field যোগ হয়েছে!</p>
+      </div>
+      <div class="card">
+        <div class="ct">📋 সকল Form Fields</div>
+        <p style="color:var(--gray);font-size:13px;margin-bottom:12px;">এই fields গুলো Registration Form এ দেখাবে।</p>
+        <div class="il" id="fields-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div>
+      </div>
+    </div>
+
     <!-- CHATBOT -->
     <div class="panel" id="p-chatbot">
       <div class="card">
@@ -312,7 +352,7 @@ import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstati
 const app = initializeApp({ apiKey:"AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c", authDomain:"talentverse-bd-b072c.firebaseapp.com", databaseURL:"https://talentverse-bd-b072c-default-rtdb.firebaseio.com", projectId:"talentverse-bd-b072c", storageBucket:"talentverse-bd-b072c.firebasestorage.app", messagingSenderId:"304686688553", appId:"1:304686688553:web:0a887b8fc517e24d00af38" });
 const db = getDatabase(app);
 
-const titles = {dashboard:'Dashboard',chatbot:'Chatbot Replies',events:'Events',team:'Team Members',certificates:'Certificates',applications:'Applications',messages:'Messages',stats:'Site Stats',countdown:'Countdown Timer'};
+const titles = {dashboard:'Dashboard',chatbot:'Chatbot Replies',registrations:'Registrations',reg_fields:'Form Fields',events:'Events',team:'Team Members',certificates:'Certificates',applications:'Applications',messages:'Messages',stats:'Site Stats',countdown:'Countdown Timer'};
 
 window.login = function() {
   if(document.getElementById('au').value==='admin' && document.getElementById('ap').value==='tvbd2026') {
@@ -455,6 +495,66 @@ onValue(ref(db,'messages'),snap=>{
       ${isNew?`<button class="action-btn" onclick="window.readMsg('${k}')">✅ পড়া হয়েছে</button>`:''}
     </div>`;
   }).join('');
+});
+
+
+// REGISTRATIONS
+onValue(ref(db,'registrations'), snap => {
+  const list = document.getElementById('reg-list');
+  const badge = document.getElementById('rb');
+  const count = document.getElementById('reg-count');
+  if(!list) return;
+  if(!snap.exists()) { list.innerHTML='<p style="color:var(--gray)">কোনো Registration নেই।</p>'; if(badge)badge.style.display='none'; return; }
+  const data = snap.val();
+  const keys = Object.keys(data).reverse();
+  const pending = keys.filter(k=>data[k].status==='pending').length;
+  if(badge){badge.textContent=pending;badge.style.display=pending>0?'inline':'none';}
+  if(count) count.textContent=`(${keys.length} টি)`;
+  list.innerHTML = keys.map(k => {
+    const r = data[k];
+    const ev = r.event ? r.event.name : '—';
+    const isNew = r.status === 'pending';
+    const fields = Object.entries(r).filter(([fk])=>!['event','submittedAt','date','status','regId'].includes(fk));
+    return `<div class="li" style="flex-direction:column;align-items:flex-start;gap:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+        <div class="li-info"><h4>${r.name||r.regId||k}<span class="badge ${isNew?'by':'bg'}">${isNew?'নতুন':'দেখা হয়েছে'}</span></h4><p>${ev} · ${r.date||''}</p></div>
+        <button class="bd" onclick="window.delReg('${k}')">🗑</button>
+      </div>
+      <div class="msg-box" style="background:var(--lg);border-radius:8px;padding:10px;font-size:13px;width:100%;line-height:1.8;">
+        ${r.regId?'🎫 '+r.regId+'<br>':''}
+        ${fields.map(([fk,fv])=>`<strong>${fk}:</strong> ${fv}`).join('<br>')}
+      </div>
+      ${isNew?`<button class="action-btn" onclick="window.readReg('${k}')">✅ দেখা হয়েছে</button>`:''}
+    </div>`;
+  }).join('');
+});
+window.delReg=k=>{if(confirm('মুছবেন?'))remove(ref(db,'registrations/'+k));}
+window.readReg=k=>set(ref(db,'registrations/'+k+'/status'),'read');
+
+// FORM FIELDS
+window.addField = function() {
+  const id = document.getElementById('ff-id').value.trim().replace(/\s/g,'_');
+  const label = document.getElementById('ff-label').value.trim();
+  const type = document.getElementById('ff-type').value;
+  const order = parseInt(document.getElementById('ff-order').value)||10;
+  const placeholder = document.getElementById('ff-placeholder').value.trim();
+  const options = document.getElementById('ff-options').value.trim();
+  const required = document.getElementById('ff-required').checked;
+  if(!id||!label){alert('ID ও Label দিন!');return;}
+  push(ref(db,'reg_fields'),{id,label,type,order,placeholder,options,required,createdAt:Date.now()}).then(()=>{
+    ok('ff-ok');
+    ['ff-id','ff-label','ff-placeholder','ff-options'].forEach(i=>document.getElementById(i).value='');
+    document.getElementById('ff-required').checked=false;
+  });
+}
+window.deleteField=k=>{if(confirm('মুছবেন?'))remove(ref(db,'reg_fields/'+k));}
+onValue(ref(db,'reg_fields'), snap => {
+  const list = document.getElementById('fields-list');
+  if(!list) return;
+  if(!snap.exists()){list.innerHTML='<p style="color:var(--gray)">কোনো Field নেই। Default fields ব্যবহার হচ্ছে।</p>';return;}
+  const data = snap.val();
+  const sorted = Object.entries(data).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
+  list.innerHTML = sorted.map(([k,f])=>`<div class="li"><div class="li-info"><h4>${f.label} <span class="badge bb">${f.type}</span>${f.required?'<span class="badge br">Required</span>':''}</h4><p>ID: ${f.id} · Order: ${f.order||0}</p></div><button class="bd" onclick="window.deleteField('${k}')">🗑</button></div>`).join('');
 });
 
 // CHATBOT REPLIES
