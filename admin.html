@@ -126,6 +126,7 @@ body{font-family:'Inter',sans-serif;background:var(--lg);color:var(--navy)}
     <div class="ns">Chatbot</div>
     <div class="ni" onclick="sp('chatbot',this)"><span class="ic">🤖</span> Chatbot Replies</div>
     <div class="ns">Settings</div>
+    <div class="ni" onclick="sp('announcement',this)"><span class="ic">📢</span> Announcement</div>
     <div class="ni" onclick="sp('stats',this)"><span class="ic">📈</span> Site Stats</div>
     <div class="ni" onclick="sp('countdown',this)"><span class="ic">⏳</span> Countdown</div>
     <div class="sbm"><button class="lob" onclick="logout()">🚪 Logout</button></div>
@@ -243,6 +244,26 @@ body{font-family:'Inter',sans-serif;background:var(--lg);color:var(--navy)}
       </div>
     </div>
 
+    <!-- ANNOUNCEMENT -->
+    <div class="panel" id="p-announcement">
+      <div class="card">
+        <div class="ct">📢 Announcement Banner</div>
+        <p style="color:var(--gray);font-size:13px;margin-bottom:16px;">এই Banner টি সব পেজের উপরে দেখাবে।</p>
+        <div class="fg"><label>Announcement Text *</label><input type="text" id="an-text" placeholder="🎉 নতুন ইভেন্ট আসছে! Registration শুরু হয়েছে।"></div>
+        <div class="fg"><label>Link (optional)</label><input type="text" id="an-link" placeholder="https://... বা events.html"></div>
+        <div class="fg" style="flex-direction:row;align-items:center;gap:10px;">
+          <input type="checkbox" id="an-active" style="width:auto;">
+          <label for="an-active" style="text-transform:none;letter-spacing:0;font-size:14px;font-weight:600;">Active (দেখাবে)</label>
+        </div>
+        <button class="bs" onclick="saveAnn()" style="margin-top:12px;">💾 Save করুন</button>
+        <p class="ok" id="an-ok">✅ Announcement আপডেট হয়েছে!</p>
+      </div>
+      <div class="card" id="ann-preview-card" style="display:none;">
+        <div class="ct">👁️ Preview</div>
+        <div style="background:linear-gradient(135deg,#0D1B40,#1A6BCC);color:white;padding:12px 20px;border-radius:10px;text-align:center;font-size:13px;font-weight:600;" id="ann-preview-text">—</div>
+      </div>
+    </div>
+
     <!-- REGISTRATIONS -->
     <div class="panel" id="p-registrations">
       <div class="card">
@@ -352,7 +373,7 @@ import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstati
 const app = initializeApp({ apiKey:"AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c", authDomain:"talentverse-bd-b072c.firebaseapp.com", databaseURL:"https://talentverse-bd-b072c-default-rtdb.firebaseio.com", projectId:"talentverse-bd-b072c", storageBucket:"talentverse-bd-b072c.firebasestorage.app", messagingSenderId:"304686688553", appId:"1:304686688553:web:0a887b8fc517e24d00af38" });
 const db = getDatabase(app);
 
-const titles = {dashboard:'Dashboard',chatbot:'Chatbot Replies',registrations:'Registrations',reg_fields:'Form Fields',events:'Events',team:'Team Members',certificates:'Certificates',applications:'Applications',messages:'Messages',stats:'Site Stats',countdown:'Countdown Timer'};
+const titles = {dashboard:'Dashboard',chatbot:'Chatbot Replies',registrations:'Registrations',reg_fields:'Form Fields',announcement:'Announcement Banner',events:'Events',team:'Team Members',certificates:'Certificates',applications:'Applications',messages:'Messages',stats:'Site Stats',countdown:'Countdown Timer'};
 
 window.login = function() {
   if(document.getElementById('au').value==='admin' && document.getElementById('ap').value==='tvbd2026') {
@@ -497,6 +518,28 @@ onValue(ref(db,'messages'),snap=>{
   }).join('');
 });
 
+
+
+// ANNOUNCEMENT
+window.saveAnn = function() {
+  const text = document.getElementById('an-text').value.trim();
+  const link = document.getElementById('an-link').value.trim();
+  const active = document.getElementById('an-active').checked;
+  if(!text){alert('Text দিন!');return;}
+  set(ref(db,'announcement'),{text,link,active,updatedAt:Date.now()}).then(()=>{
+    ok('an-ok');
+    document.getElementById('ann-preview-card').style.display='block';
+    document.getElementById('ann-preview-text').textContent=text;
+  });
+}
+onValue(ref(db,'announcement'),snap=>{
+  if(!snap.exists())return;
+  const a=snap.val();
+  if(document.getElementById('an-text'))document.getElementById('an-text').value=a.text||'';
+  if(document.getElementById('an-link'))document.getElementById('an-link').value=a.link||'';
+  if(document.getElementById('an-active'))document.getElementById('an-active').checked=a.active||false;
+  if(a.text){document.getElementById('ann-preview-card').style.display='block';document.getElementById('ann-preview-text').textContent=a.text;}
+});
 
 // REGISTRATIONS
 onValue(ref(db,'registrations'), snap => {

@@ -2,6 +2,26 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="Register for TalentVerse Bangladesh events online. Quick and easy registration form.">
+  <meta name="keywords" content="TalentVerse Bangladesh, talent, youth organization, Bangladesh, quiz, events, opportunity">
+  <meta name="author" content="TalentVerse Bangladesh">
+  <!-- Open Graph (Facebook/WhatsApp) -->
+  <meta property="og:title" content="Event Registration — TalentVerse Bangladesh">
+  <meta property="og:description" content="Register for TalentVerse Bangladesh events online. Quick and easy registration form.">
+  <meta property="og:image" content="https://faonlineclub2026.github.io/TalentVerseBD/logo.png">
+  <meta property="og:url" content="https://faonlineclub2026.github.io/TalentVerseBD/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="TalentVerse Bangladesh">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Event Registration — TalentVerse Bangladesh">
+  <meta name="twitter:description" content="Register for TalentVerse Bangladesh events online. Quick and easy registration form.">
+  <meta name="twitter:image" content="https://faonlineclub2026.github.io/TalentVerseBD/logo.png">
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0D1B40">
+  <link rel="apple-touch-icon" href="logo.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Event Registration — TalentVerse Bangladesh</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -38,8 +58,48 @@
 .required{color:var(--red)}
 @media(max-width:600px){.event-select{grid-template-columns:1fr}}
 </style>
+
+<style>
+/* WhatsApp Button */
+.wa-btn {
+  position: fixed; bottom: 90px; right: 24px; z-index: 997;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: #25D366; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none; font-size: 26px;
+  animation: waPulse 3s ease-in-out infinite;
+}
+.wa-btn:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(37,211,102,0.5); }
+@keyframes waPulse {
+  0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+  50% { box-shadow: 0 4px 32px rgba(37,211,102,0.7); }
+}
+/* Announcement Banner */
+.ann-banner {
+  background: linear-gradient(135deg, #0D1B40, #1A6BCC);
+  color: white; padding: 10px 20px;
+  text-align: center; font-size: 13px; font-weight: 600;
+  position: relative; display: none;
+}
+.ann-banner.show { display: block; }
+.ann-banner a { color: var(--bright); text-decoration: none; margin-left: 8px; }
+.ann-close { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; color: white; font-size: 18px; cursor: pointer; opacity: 0.7; }
+.ann-close:hover { opacity: 1; }
+</style>
 </head>
 <body>
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/8801634428536" target="_blank" class="wa-btn" title="WhatsApp এ যোগাযোগ করুন">💬</a>
+
+<!-- Announcement Banner -->
+<div class="ann-banner" id="annBanner">
+  <span id="annText">—</span>
+  <a href="#" id="annLink" style="display:none">আরও জানুন →</a>
+  <button class="ann-close" onclick="closeAnn()">✕</button>
+</div>
 <nav id="navbar">
   <a href="index.html" class="nav-logo"><img src="logo.png" alt="TalentVerse Bangladesh"><span>Talent<b>Verse</b></span></a>
   <ul class="nav-links">
@@ -268,6 +328,29 @@ function showTyping(){const msgs=document.getElementById("chatMessages");const d
 function removeTyping(){const t=document.getElementById("typing");if(t)t.remove();}
 async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.getReply(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, WhatsApp: +8801634428536",false);}btn.disabled=false;}
 setTimeout(()=>{if(!chatOpen)document.getElementById("chat-badge").style.display="flex";},3000);
+</script>
+
+<script>
+// Announcement Banner
+function closeAnn() { document.getElementById('annBanner').style.display='none'; sessionStorage.setItem('annClosed','1'); }
+</script>
+<script type="module">
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+const apps = getApps();
+const app = apps.length ? apps[0] : initializeApp({ apiKey:"AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c", authDomain:"talentverse-bd-b072c.firebaseapp.com", databaseURL:"https://talentverse-bd-b072c-default-rtdb.firebaseio.com", projectId:"talentverse-bd-b072c", storageBucket:"talentverse-bd-b072c.firebasestorage.app", messagingSenderId:"304686688553", appId:"1:304686688553:web:0a887b8fc517e24d00af38" });
+const db = getDatabase(app);
+onValue(ref(db,'announcement'), snap => {
+  if(!snap.exists()) return;
+  const a = snap.val();
+  if(a.active && !sessionStorage.getItem('annClosed')) {
+    document.getElementById('annText').textContent = a.text || '';
+    const link = document.getElementById('annLink');
+    if(a.link) { link.href = a.link; link.style.display='inline'; }
+    document.getElementById('annBanner').classList.add('show');
+    document.getElementById('annBanner').style.display='block';
+  }
+});
 </script>
 </body>
 </html>
