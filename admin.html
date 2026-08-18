@@ -178,6 +178,7 @@ body{font-family:'Inter',sans-serif;background:var(--lg);color:var(--navy)}
         </div>
         <div class="fg"><label>বিবরণ *</label><textarea id="edesc" placeholder="ইভেন্টের বিবরণ..."></textarea></div>
         <button class="bs" onclick="addEvent()">➕ Event যোগ করুন</button>
+        <button class="action-btn" id="ev-cancel" style="display:none;margin-left:8px;" onclick="window.cancelEditEvent()">✖ বাতিল করুন</button>
         <p class="ok" id="ev-ok">✅ Event যোগ হয়েছে!</p>
       </div>
       <div class="card"><div class="ct">📋 সকল Events</div><div class="il" id="events-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div></div>
@@ -204,6 +205,7 @@ body{font-family:'Inter',sans-serif;background:var(--lg);color:var(--navy)}
         </div>
         <div class="fg"><label>সংক্ষিপ্ত পরিচয়</label><textarea id="mb2" placeholder="এই সদস্য সম্পর্কে..."></textarea></div>
         <button class="bs" onclick="addMember()">➕ Member যোগ করুন</button>
+        <button class="action-btn" id="mb-cancel" style="display:none;margin-left:8px;" onclick="window.cancelEditMember()">✖ বাতিল করুন</button>
         <p class="ok" id="mb-ok">✅ Member যোগ হয়েছে!</p>
       </div>
       <div class="card"><div class="ct">👥 সকল Members</div><div class="il" id="members-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div></div>
@@ -416,7 +418,7 @@ window.prevPhoto = function(input) {
 window.addEvent = function() {
   const ev={name:document.getElementById('en').value.trim(),category:document.getElementById('ec').value,date:document.getElementById('ed').value,platform:document.getElementById('ep').value,status:document.getElementById('es').value,color:document.getElementById('ecl').value,desc:document.getElementById('edesc').value.trim(),createdAt:Date.now()};
   if(!ev.name||!ev.desc){alert('নাম ও বিবরণ দিন!');return;}
-  push(ref(db,'events'),ev).then(()=>{ ok('ev-ok'); ['en','ed','edesc'].forEach(i=>document.getElementById(i).value=''); });
+  push(ref(db,'events'),ev).then(()=>{ ok('ev-ok'); ['en','ed','edesc'].forEach(i=>document.getElementById(i).value=''); }).catch(err=>{ alert('❌ যোগ করা ব্যর্থ হয়েছে: '+err.message); console.error('addEvent failed:', err); });
 }
 
 window.editEvent = function(k) {
@@ -434,17 +436,34 @@ window.editEvent = function(k) {
   // Change button to update
   const btn = document.querySelector('#p-events .bs');
   btn.textContent = '💾 Event আপডেট করুন';
+  btn.disabled = false;
   btn.onclick = function() {
     const ev = { name:document.getElementById('en').value.trim(), category:document.getElementById('ec').value, date:document.getElementById('ed').value, platform:document.getElementById('ep').value, status:document.getElementById('es').value, color:document.getElementById('ecl').value, desc:document.getElementById('edesc').value.trim(), updatedAt:Date.now() };
     if(!ev.name||!ev.desc){alert('নাম ও বিবরণ দিন!');return;}
+    btn.disabled = true;
+    btn.textContent = '⏳ সেভ হচ্ছে...';
     set(ref(db,'events/'+k), {...window._eventsData[k], ...ev}).then(()=>{
       ok('ev-ok');
+      btn.disabled = false;
       btn.textContent = '➕ Event যোগ করুন';
       btn.onclick = window.addEvent;
       ['en','ed','edesc'].forEach(i=>document.getElementById(i).value='');
+    }).catch(err=>{
+      btn.disabled = false;
+      btn.textContent = '💾 Event আপডেট করুন';
+      alert('❌ Update ব্যর্থ হয়েছে: ' + err.message);
+      console.error('editEvent update failed:', err);
     });
   };
-  sp('events', document.querySelectorAll('.ni')[2]);
+  window.cancelEditEvent = function() {
+    btn.textContent = '➕ Event যোগ করুন';
+    btn.onclick = window.addEvent;
+    btn.disabled = false;
+    document.getElementById('ev-cancel').style.display = 'none';
+    ['en','ed','edesc'].forEach(i=>document.getElementById(i).value='');
+  };
+  document.getElementById('ev-cancel').style.display = 'inline-block';
+  sp('events', document.querySelectorAll('.ni')[1]);
   window.scrollTo(0,0);
 }
 
@@ -460,6 +479,23 @@ onValue(ref(db,'events'),snap=>{
 });
 
 // TEAM
+// Default founder data — mirrors team.html. These always exist visually even
+// before an admin ever saves them to Firebase, and are editable like any member.
+const founderDefaults = {
+  founder_ceo: { name:'Abdur Rahman', role:'CEO & Founder', initials:'AR', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রতিষ্ঠাতা ও প্রধান নির্বাহী কর্মকর্তা।', photo:'' },
+  founder_coo: { name:'Abdullah', role:'COO', initials:'AB', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রধান পরিচালন কর্মকর্তা।', photo:'' }
+};
+
+function resetMemberForm(){
+  ['mn','mr','mi','mb2'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('md').value='';
+  document.getElementById('md-sel').value='';
+  document.getElementById('pp').style.display='none';
+  document.getElementById('pu-txt').textContent='📸 ছবি সিলেক্ট করতে ক্লিক করুন';
+  document.getElementById('mf').value='';
+  window._editingMemberPhoto='';
+}
+
 window.addMember = function() {
   const file=document.getElementById('mf').files[0];
   const init=(document.getElementById('mi').value||document.getElementById('mn').value.substring(0,2)).toUpperCase();
@@ -468,26 +504,88 @@ window.addMember = function() {
     if(!m.name||!m.role){alert('নাম ও পদবী দিন!');return;}
     push(ref(db,'members'),m).then(()=>{
       ok('mb-ok');
-      ['mn','mr','mi','mb2'].forEach(i=>document.getElementById(i).value='');
-      document.getElementById('pp').style.display='none';
-      document.getElementById('pu-txt').textContent='📸 ছবি সিলেক্ট করতে ক্লিক করুন';
-      document.getElementById('mf').value='';
+      resetMemberForm();
     });
   };
   if(file){const r=new FileReader();r.onload=e=>save(e.target.result);r.readAsDataURL(file);}
   else save();
 }
-window.deleteMember = function(k){if(confirm('মুছবেন?'))remove(ref(db,'members/'+k));}
+
+window.editMember = function(k) {
+  const m = window._membersData[k];
+  if(!m) return;
+  document.getElementById('mn').value = m.name||'';
+  document.getElementById('mr').value = m.role||'';
+  document.getElementById('mi').value = m.initials||'';
+  document.getElementById('md').value = m.dept||'';
+  document.getElementById('md-sel').value = ['Leadership','Administration','IT','Creative','Cultural','Marketing','Content','Other'].includes(m.dept) ? m.dept : '';
+  document.getElementById('mb2').value = m.bio||'';
+  window._editingMemberPhoto = m.photo||'';
+  const pp = document.getElementById('pp');
+  if(m.photo){ pp.src = m.photo; pp.style.display='block'; document.getElementById('pu-txt').textContent='✅ ছবি সিলেক্ট হয়েছে'; }
+  else { pp.style.display='none'; document.getElementById('pu-txt').textContent='📸 ছবি সিলেক্ট করতে ক্লিক করুন'; }
+
+  const btn = document.querySelector('#p-team .bs');
+  btn.textContent = '💾 Member আপডেট করুন';
+  btn.disabled = false;
+  btn.onclick = function() {
+    const file = document.getElementById('mf').files[0];
+    const init = (document.getElementById('mi').value||document.getElementById('mn').value.substring(0,2)).toUpperCase();
+    const finish = (photo) => {
+      const upd = { name:document.getElementById('mn').value.trim(), role:document.getElementById('mr').value.trim(), initials:init, dept:document.getElementById('md').value, bio:document.getElementById('mb2').value.trim(), photo, updatedAt:Date.now() };
+      if(!upd.name||!upd.role){alert('নাম ও পদবী দিন!');return;}
+      btn.disabled = true;
+      btn.textContent = '⏳ সেভ হচ্ছে...';
+      set(ref(db,'members/'+k), {...m, ...upd}).then(()=>{
+        ok('mb-ok');
+        btn.textContent = '➕ Member যোগ করুন';
+        btn.onclick = window.addMember;
+        resetMemberForm();
+        document.getElementById('mb-cancel').style.display = 'none';
+      }).catch(err=>{
+        btn.disabled = false;
+        btn.textContent = '💾 Member আপডেট করুন';
+        alert('❌ Update ব্যর্থ হয়েছে: ' + err.message);
+        console.error('editMember update failed:', err);
+      });
+    };
+    if(file){ const r=new FileReader(); r.onload=e=>finish(e.target.result); r.readAsDataURL(file); }
+    else finish(window._editingMemberPhoto||'');
+  };
+  document.getElementById('mb-cancel').style.display = 'inline-block';
+  sp('team', document.querySelectorAll('.ni')[3]);
+  window.scrollTo(0,0);
+}
+
+window.cancelEditMember = function() {
+  const btn = document.querySelector('#p-team .bs');
+  btn.textContent = '➕ Member যোগ করুন';
+  btn.onclick = window.addMember;
+  btn.disabled = false;
+  document.getElementById('mb-cancel').style.display = 'none';
+  resetMemberForm();
+}
+
+window.deleteMember = function(k){
+  const isFounder = k==='founder_ceo' || k==='founder_coo';
+  const msg = isFounder ? 'এটি একজন Founder — মুছে ফেললে ডিফল্ট তথ্যে ফিরে যাবে। এগিয়ে যাবেন?' : 'মুছবেন?';
+  if(confirm(msg)) remove(ref(db,'members/'+k));
+}
 
 onValue(ref(db,'members'),snap=>{
   const list=document.getElementById('members-list');
-  if(!snap.exists()){list.innerHTML='<p style="color:var(--gray)">কোনো Member নেই।</p>';document.getElementById('d-mb').textContent='0';return;}
-  const data=snap.val();const keys=Object.keys(data);
-  document.getElementById('d-mb').textContent=keys.length;
+  const data = { ...founderDefaults, ...(snap.exists() ? snap.val() : {}) };
+  window._membersData = data;
+  const keys = Object.keys(data);
+  document.getElementById('d-mb').textContent = keys.length;
+  // Founders first
+  keys.sort((a,b)=> (a==='founder_ceo'?-2:a==='founder_coo'?-1:0) - (b==='founder_ceo'?-2:b==='founder_coo'?-1:0));
   list.innerHTML=keys.map(k=>{
     const m=data[k];
+    const isFounder = k==='founder_ceo' || k==='founder_coo';
     const av=m.photo?`<img src="${m.photo}" class="mav">`:`<div class="mav-p">${m.initials||'?'}</div>`;
-    return `<div class="li">${av}<div class="li-info"><h4>${m.name}<span class="badge bb">${m.dept}</span></h4><p>${m.role}</p></div><button class="bd" onclick="window.deleteMember('${k}')">🗑</button></div>`;
+    const delBtn = isFounder ? `<button class="bd" onclick="window.deleteMember('${k}')" title="ডিফল্টে ফিরিয়ে দিন">↺</button>` : `<button class="bd" onclick="window.deleteMember('${k}')">🗑</button>`;
+    return `<div class="li">${av}<div class="li-info"><h4>${m.name}${isFounder?' <span class="badge by">Founder</span>':''}<span class="badge bb">${m.dept}</span></h4><p>${m.role}</p></div><div style="display:flex;gap:8px;"><button class="action-btn" onclick="window.editMember('${k}')">✏️ Edit</button>${delBtn}</div></div>`;
   }).join('');
 });
 

@@ -160,40 +160,8 @@
       <h2 class="section-title">আমাদের আয়োজন</h2>
       <p class="section-desc">প্রতিভা বিকাশের লক্ষ্যে আমরা নিয়মিত বিভিন্ন ইভেন্ট আয়োজন করি।</p>
     </div>
-    <div class="events-grid">
-      <div class="event-card">
-        <div class="event-top">
-          <span class="event-tag">Quiz</span>
-          <h3>Islamic Quiz Competition</h3>
-        </div>
-        <div class="event-body">
-          <div class="event-meta"><span>📅 2026</span><span>🌐 Online</span><span class="badge-ongoing">Completed</span></div>
-          <p>ইসলামিক জ্ঞান যাচাই করার বিশেষ প্রতিযোগিতা।</p>
-          <a href="events.html" class="event-btn">View Details →</a>
-        </div>
-      </div>
-      <div class="event-card">
-        <div class="event-top" style="background:linear-gradient(135deg,#1a4080,#2563eb);">
-          <span class="event-tag">Talent Show</span>
-          <h3>TalentVerse Showcase</h3>
-        </div>
-        <div class="event-body">
-          <div class="event-meta"><span>📅 Coming Soon</span><span>🌐 Online & Offline</span></div>
-          <p>আপনার প্রতিভা দেখানোর সুযোগ — গান, বক্তৃতা, শিল্পকলা।</p>
-          <a href="events.html" class="event-btn">Learn More →</a>
-        </div>
-      </div>
-      <div class="event-card">
-        <div class="event-top" style="background:linear-gradient(135deg,#064e3b,#059669);">
-          <span class="event-tag">Workshop</span>
-          <h3>Skill Development Workshop</h3>
-        </div>
-        <div class="event-body">
-          <div class="event-meta"><span>📅 Coming Soon</span><span>🌐 Online</span></div>
-          <p>বিশেষজ্ঞদের নেতৃত্বে দক্ষতা বাড়ানোর কর্মশালা।</p>
-          <a href="events.html" class="event-btn">Stay Updated →</a>
-        </div>
-      </div>
+    <div class="events-grid" id="home-events-grid">
+      <p style="color:var(--gray);">লোড হচ্ছে...</p>
     </div>
     <div style="text-align:center;margin-top:36px;">
       <a href="events.html" class="btn-blue">View All Events →</a>
@@ -290,6 +258,50 @@ onValue(ref(db,'members'), snap => {
 </footer>
 
 <script src="script.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const app = initializeApp({
+  apiKey: "AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c",
+  authDomain: "talentverse-bd-b072c.firebaseapp.com",
+  databaseURL: "https://talentverse-bd-b072c-default-rtdb.firebaseio.com",
+  projectId: "talentverse-bd-b072c",
+  storageBucket: "talentverse-bd-b072c.firebasestorage.app",
+  messagingSenderId: "304686688553",
+  appId: "1:304686688553:web:0a887b8fc517e24d00af38"
+});
+const db = getDatabase(app);
+
+onValue(ref(db, 'events'), snap => {
+  const grid = document.getElementById('home-events-grid');
+  if (!snap.exists()) {
+    grid.innerHTML = '<p style="color:var(--gray);">কোনো ইভেন্ট নেই।</p>';
+    return;
+  }
+  const data = snap.val();
+  const keys = Object.keys(data).reverse().slice(0, 3);
+  grid.innerHTML = keys.map(k => {
+    const e = data[k];
+    const badgeStyle = e.status === 'Completed' ? 'background:#dcfce7;color:#166534;' : e.status === 'Ongoing' ? 'background:#fef3c7;color:#92400e;' : 'background:#e0f2fe;color:#0369a1;';
+    return `<div class="event-card">
+      <div class="event-top" style="background:${e.color || 'linear-gradient(135deg,#1a2c5b,#2d4494)'}">
+        <span class="event-tag">${e.category}</span>
+        <h3>${e.name}</h3>
+      </div>
+      <div class="event-body">
+        <div class="event-meta">
+          <span>📅 ${e.date}</span>
+          <span>🌐 ${e.platform}</span>
+          <span style="font-size:11px;font-weight:700;padding:2px 10px;border-radius:100px;${badgeStyle}">${e.status}</span>
+        </div>
+        <p>${e.desc}</p>
+        <a href="events.html" class="event-btn">View Details →</a>
+      </div>
+    </div>`;
+  }).join('');
+});
+</script>
 
 <!-- CHATBOT -->
 <link rel="stylesheet" href="chatbot.css">

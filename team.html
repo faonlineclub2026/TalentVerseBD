@@ -157,21 +157,21 @@ const db = getDatabase(app);
 const deptIcons = { Leadership:'⭐', Administration:'📋', IT:'💻', Creative:'🎨', Cultural:'🎭', Marketing:'📣', Content:'✍️', Other:'👤' };
 const deptOrder = ['Leadership','Administration','IT','Creative','Cultural','Marketing','Content','Other'];
 
+// Default founder data — used until an admin edits them in the Admin Panel,
+// at which point the Firebase entry (same key) takes over.
+const founderDefaults = {
+  founder_ceo: { name:'Abdur Rahman', role:'CEO & Founder', initials:'AR', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রতিষ্ঠাতা ও প্রধান নির্বাহী কর্মকর্তা।', photo:'' },
+  founder_coo: { name:'Abdullah', role:'COO', initials:'AB', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রধান পরিচালন কর্মকর্তা।', photo:'' }
+};
+
 onValue(ref(db,'members'), snap => {
   const container = document.getElementById('team-container');
-  
-  // Always show founders first
-  const founders = [
-    { name:'Abdur Rahman', role:'CEO & Founder', initials:'AR', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রতিষ্ঠাতা ও প্রধান নির্বাহী কর্মকর্তা।', photo:'' },
-    { name:'Abdullah', role:'COO', initials:'AB', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রধান পরিচালন কর্মকর্তা।', photo:'' }
-  ];
 
-  let allMembers = [...founders];
-  
-  if(snap.exists()) {
-    const data = snap.val();
-    allMembers = [...founders, ...Object.values(data)];
-  }
+  const data = snap.exists() ? snap.val() : {};
+  // Merge: Firebase entries with keys founder_ceo / founder_coo override the defaults,
+  // so editing them in Admin Panel updates what shows here.
+  const merged = { ...founderDefaults, ...data };
+  const allMembers = Object.values(merged);
 
   // Group by department
   const grouped = {};
