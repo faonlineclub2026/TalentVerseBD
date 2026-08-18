@@ -193,7 +193,7 @@ body{font-family:'Inter',sans-serif;background:var(--lg);color:var(--navy)}
         </div>
         <div class="fr">
           <div class="fg"><label>Initials (২ অক্ষর)</label><input type="text" id="mi" placeholder="MR" maxlength="2"></div>
-          <div class="fg"><label>Department</label><select id="md"><option>Leadership</option><option>Administration</option><option>IT</option><option>Creative</option><option>Cultural</option><option>Marketing</option><option>Content</option><option>Other</option></select></div>
+          <div class="fg"><label>Department (সিলেক্ট করুন অথবা নিজে লিখুন)</label><select id="md-sel" onchange="document.getElementById('md').value=this.value"><option value="">-- সিলেক্ট করুন --</option><option>Leadership</option><option>Administration</option><option>IT</option><option>Creative</option><option>Cultural</option><option>Marketing</option><option>Content</option><option>Other</option></select><input type="text" id="md" placeholder="অথবা নিজে লিখুন..." style="margin-top:8px;"></div>
         </div>
         <div class="fg"><label>ছবি আপলোড করুন</label>
           <div class="pu" id="pu">
@@ -315,6 +315,16 @@ body{font-family:'Inter',sans-serif;background:var(--lg);color:var(--navy)}
         <p class="ok" id="cb-ok">✅ Reply যোগ হয়েছে!</p>
       </div>
       <div class="card">
+        <div class="ct">⚡ Quick Reply Buttons</div>
+        <p style="color:var(--gray);font-size:13px;margin-bottom:16px;">Chatbot এ যে Quick Buttons দেখাবে (সর্বোচ্চ ৪টা)।</p>
+        <div id="quick-btns-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="qb-text" placeholder="নতুন button text..." style="flex:1;border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:Inter,sans-serif;outline:none;">
+          <button class="bs" onclick="addQuickBtn()" style="white-space:nowrap;">➕ Add</button>
+        </div>
+        <p class="ok" id="qb-ok">✅ Saved!</p>
+      </div>
+      <div class="card">
         <div class="ct">📋 সকল Chatbot Replies</div>
         <p style="color:var(--gray);font-size:13px;margin-bottom:12px;">এই replies গুলো TVBot ব্যবহার করবে। Default replies সবসময় থাকবে।</p>
         <div class="il" id="chatbot-list"><p style="color:var(--gray)">লোড হচ্ছে...</p></div>
@@ -408,15 +418,45 @@ window.addEvent = function() {
   if(!ev.name||!ev.desc){alert('নাম ও বিবরণ দিন!');return;}
   push(ref(db,'events'),ev).then(()=>{ ok('ev-ok'); ['en','ed','edesc'].forEach(i=>document.getElementById(i).value=''); });
 }
+
+window.editEvent = function(k) {
+  const data = window._eventsData;
+  if(!data || !data[k]) return;
+  const e = data[k];
+  document.getElementById('en').value = e.name||'';
+  document.getElementById('ec').value = e.category||'Quiz';
+  document.getElementById('ed').value = e.date||'';
+  document.getElementById('ep').value = e.platform||'Online';
+  document.getElementById('es').value = e.status||'Upcoming';
+  document.getElementById('edesc').value = e.desc||'';
+  document.getElementById('ecl').value = e.color||'linear-gradient(135deg,#0D1B40,#1A6BCC)';
+  
+  // Change button to update
+  const btn = document.querySelector('#p-events .bs');
+  btn.textContent = '💾 Event আপডেট করুন';
+  btn.onclick = function() {
+    const ev = { name:document.getElementById('en').value.trim(), category:document.getElementById('ec').value, date:document.getElementById('ed').value, platform:document.getElementById('ep').value, status:document.getElementById('es').value, color:document.getElementById('ecl').value, desc:document.getElementById('edesc').value.trim(), updatedAt:Date.now() };
+    if(!ev.name||!ev.desc){alert('নাম ও বিবরণ দিন!');return;}
+    set(ref(db,'events/'+k), {...window._eventsData[k], ...ev}).then(()=>{
+      ok('ev-ok');
+      btn.textContent = '➕ Event যোগ করুন';
+      btn.onclick = window.addEvent;
+      ['en','ed','edesc'].forEach(i=>document.getElementById(i).value='');
+    });
+  };
+  sp('events', document.querySelectorAll('.ni')[2]);
+  window.scrollTo(0,0);
+}
+
 window.deleteEvent = function(k){if(confirm('মুছবেন?'))remove(ref(db,'events/'+k));}
 
 onValue(ref(db,'events'),snap=>{
   const list=document.getElementById('events-list');
   if(!snap.exists()){list.innerHTML='<p style="color:var(--gray)">কোনো Event নেই।</p>';document.getElementById('d-ev').textContent='0';return;}
-  const data=snap.val();const keys=Object.keys(data).reverse();
+  const data=snap.val(); window._eventsData=data; const keys=Object.keys(data).reverse();
   document.getElementById('d-ev').textContent=keys.length;
   const bc=s=>s==='Completed'?'bg':s==='Ongoing'?'by':'bb';
-  list.innerHTML=keys.map(k=>`<div class="li"><div class="li-info"><h4>${data[k].name}<span class="badge ${bc(data[k].status)}">${data[k].status}</span></h4><p>${data[k].category} · ${data[k].date} · ${data[k].platform}</p></div><button class="bd" onclick="window.deleteEvent('${k}')">🗑</button></div>`).join('');
+  list.innerHTML=keys.map(k=>`<div class="li"><div class="li-info"><h4>${data[k].name}<span class="badge ${bc(data[k].status)}">${data[k].status}</span></h4><p>${data[k].category} · ${data[k].date} · ${data[k].platform}</p></div><div style="display:flex;gap:8px;"><button class="action-btn" onclick="window.editEvent('${k}')">✏️ Edit</button><button class="bd" onclick="window.deleteEvent('${k}')">🗑</button></div></div>`).join('');
 });
 
 // TEAM
@@ -474,7 +514,7 @@ onValue(ref(db,'applications'),snap=>{
   const badge=document.getElementById('ab');
   const count=document.getElementById('ap-count');
   if(!snap.exists()){list.innerHTML='<p style="color:var(--gray)">কোনো Application নেই।</p>';badge.style.display='none';document.getElementById('d-ap').textContent='0';return;}
-  const data=snap.val();const keys=Object.keys(data).reverse();
+  const data=snap.val(); window._eventsData=data; const keys=Object.keys(data).reverse();
   const pending=keys.filter(k=>data[k].status==='pending').length;
   badge.textContent=pending;badge.style.display=pending>0?'inline':'none';
   document.getElementById('d-ap').textContent=pending;
@@ -500,7 +540,7 @@ onValue(ref(db,'messages'),snap=>{
   const badge=document.getElementById('mb');
   const count=document.getElementById('ms-count');
   if(!snap.exists()){list.innerHTML='<p style="color:var(--gray)">কোনো Message নেই।</p>';badge.style.display='none';document.getElementById('d-ms').textContent='0';return;}
-  const data=snap.val();const keys=Object.keys(data).reverse();
+  const data=snap.val(); window._eventsData=data; const keys=Object.keys(data).reverse();
   const unread=keys.filter(k=>data[k].status==='unread').length;
   badge.textContent=unread;badge.style.display=unread>0?'inline':'none';
   document.getElementById('d-ms').textContent=unread;
@@ -599,6 +639,22 @@ onValue(ref(db,'reg_fields'), snap => {
   const sorted = Object.entries(data).sort((a,b)=>(a[1].order||0)-(b[1].order||0));
   list.innerHTML = sorted.map(([k,f])=>`<div class="li"><div class="li-info"><h4>${f.label} <span class="badge bb">${f.type}</span>${f.required?'<span class="badge br">Required</span>':''}</h4><p>ID: ${f.id} · Order: ${f.order||0}</p></div><button class="bd" onclick="window.deleteField('${k}')">🗑</button></div>`).join('');
 });
+
+
+// QUICK BUTTONS
+onValue(ref(db,'chatbot_quickbtns'), snap => {
+  const list = document.getElementById('quick-btns-list');
+  if(!list) return;
+  if(!snap.exists()) { list.innerHTML='<p style="color:var(--gray);font-size:13px;">Default buttons ব্যবহার হচ্ছে।</p>'; return; }
+  const data = snap.val();
+  list.innerHTML = Object.entries(data).map(([k,v]) => `<div class="li"><div class="li-info"><h4>${v.text}</h4></div><button class="bd" onclick="window.delQB('${k}')">🗑</button></div>`).join('');
+});
+window.addQuickBtn = function() {
+  const text = document.getElementById('qb-text').value.trim();
+  if(!text) { alert('Text দিন!'); return; }
+  push(ref(db,'chatbot_quickbtns'), {text, createdAt:Date.now()}).then(()=>{ok('qb-ok'); document.getElementById('qb-text').value='';});
+}
+window.delQB = k => { if(confirm('মুছবেন?')) remove(ref(db,'chatbot_quickbtns/'+k)); }
 
 // CHATBOT REPLIES
 window.addChatbotReply = function() {

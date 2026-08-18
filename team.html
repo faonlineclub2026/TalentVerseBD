@@ -2,88 +2,77 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-  <!-- SEO Meta Tags -->
-  <meta name="description" content="Meet the leadership team of TalentVerse Bangladesh. CEO & Founder Abdur Rahman and COO Abdullah.">
-  <meta name="keywords" content="TalentVerse Bangladesh, talent, youth organization, Bangladesh, quiz, events, opportunity">
-  <meta name="author" content="TalentVerse Bangladesh">
-  <!-- Open Graph (Facebook/WhatsApp) -->
-  <meta property="og:title" content="Executive Panel — TalentVerse Bangladesh">
-  <meta property="og:description" content="Meet the leadership team of TalentVerse Bangladesh. CEO & Founder Abdur Rahman and COO Abdullah.">
-  <meta property="og:image" content="https://faonlineclub2026.github.io/TalentVerseBD/logo.png">
-  <meta property="og:url" content="https://faonlineclub2026.github.io/TalentVerseBD/">
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="TalentVerse Bangladesh">
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Executive Panel — TalentVerse Bangladesh">
-  <meta name="twitter:description" content="Meet the leadership team of TalentVerse Bangladesh. CEO & Founder Abdur Rahman and COO Abdullah.">
-  <meta name="twitter:image" content="https://faonlineclub2026.github.io/TalentVerseBD/logo.png">
-  <!-- PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0D1B40">
-  <link rel="apple-touch-icon" href="logo.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Executive Panel — TalentVerse Bangladesh</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="chatbot.css">
 <style>
-.exec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px}
-.exec-card{background:white;border:1px solid var(--border);border-radius:18px;overflow:hidden;text-align:center;transition:transform .25s,box-shadow .25s}
-.exec-card:hover{transform:translateY(-6px);box-shadow:0 16px 48px rgba(13,27,64,.12)}
-.exec-top{padding:28px 20px 20px}
-.exec-avatar{width:90px;height:90px;border-radius:50%;border:3px solid rgba(255,255,255,.3);margin:0 auto 12px;object-fit:cover;display:block}
-.exec-avatar-placeholder{width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.15);border:3px solid rgba(255,255,255,.3);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:white}
-.exec-top h4{color:white;font-size:15px;font-weight:700;margin-bottom:3px}
-.exec-top p{color:rgba(255,255,255,.6);font-size:10px;letter-spacing:2px;text-transform:uppercase}
-.exec-body{padding:14px 16px}
-.exec-body .bio{font-size:12px;color:var(--gray);line-height:1.6}
-.dept-badge{display:inline-block;background:var(--light-blue);color:var(--blue);font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;margin-bottom:8px}
-.leader-badge{display:inline-block;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:white;font-size:10px;font-weight:700;padding:3px 10px;border-radius:100px;margin-bottom:8px}
-.empty-state{text-align:center;padding:48px 20px;color:var(--gray)}
-.empty-state .icon{font-size:48px;margin-bottom:12px}
-</style>
-
-<style>
-/* WhatsApp Button */
-.wa-btn {
-  position: fixed; bottom: 90px; right: 24px; z-index: 997;
-  width: 52px; height: 52px; border-radius: 50%;
-  background: #25D366; border: none; cursor: pointer;
+.dept-section { margin-bottom: 48px; }
+.dept-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px; background: white;
+  border: 1px solid var(--border); border-radius: 14px;
+  margin-bottom: 20px; box-shadow: 0 2px 8px rgba(13,27,64,0.06);
+}
+.dept-icon {
+  width: 52px; height: 52px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--navy), var(--blue));
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
-  text-decoration: none; font-size: 26px;
-  animation: waPulse 3s ease-in-out infinite;
+  font-size: 22px; flex-shrink: 0;
 }
-.wa-btn:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(37,211,102,0.5); }
-@keyframes waPulse {
-  0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
-  50% { box-shadow: 0 4px 32px rgba(37,211,102,0.7); }
+.dept-info h3 { font-size: 20px; font-weight: 800; color: var(--navy); }
+.dept-count {
+  margin-left: auto; background: var(--light-blue); color: var(--blue);
+  padding: 6px 14px; border-radius: 100px; font-size: 13px; font-weight: 700;
+  white-space: nowrap;
 }
-/* Announcement Banner */
-.ann-banner {
-  background: linear-gradient(135deg, #0D1B40, #1A6BCC);
-  color: white; padding: 10px 20px;
-  text-align: center; font-size: 13px; font-weight: 600;
-  position: relative; display: none;
+.exec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 16px; }
+.exec-card {
+  background: white; border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden; text-align: center;
+  transition: transform .25s, box-shadow .25s;
 }
-.ann-banner.show { display: block; }
-.ann-banner a { color: var(--bright); text-decoration: none; margin-left: 8px; }
-.ann-close { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; color: white; font-size: 18px; cursor: pointer; opacity: 0.7; }
-.ann-close:hover { opacity: 1; }
+.exec-card:hover { transform: translateY(-5px); box-shadow: 0 12px 36px rgba(13,27,64,.1); }
+.exec-top { padding: 24px 16px 16px; background: linear-gradient(135deg, var(--navy), var(--blue)); }
+.exec-avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  border: 3px solid rgba(255,255,255,.3);
+  margin: 0 auto 10px; object-fit: cover; display: block;
+}
+.exec-avatar-ph {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(255,255,255,.15);
+  border: 3px solid rgba(255,255,255,.3);
+  margin: 0 auto 10px; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 800; color: white;
+}
+.exec-top h4 { color: white; font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+.exec-top p { color: rgba(255,255,255,.6); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
+.exec-body { padding: 12px 14px; }
+.exec-body .bio { font-size: 12px; color: var(--gray); line-height: 1.5; }
+.dept-badge {
+  display: inline-block; background: var(--light-blue); color: var(--blue);
+  font-size: 10px; font-weight: 700; padding: 2px 10px;
+  border-radius: 100px; margin-bottom: 6px;
+}
+.dept-icons { Leadership:'⭐', Administration:'📋', IT:'💻', Creative:'🎨', Cultural:'🎭', Marketing:'📣', Content:'✍️', Other:'👤' }
 </style>
 </head>
 <body>
 
-<!-- WhatsApp Button -->
-<a href="https://wa.me/8801634428536" target="_blank" class="wa-btn" title="WhatsApp এ যোগাযোগ করুন">💬</a>
+<style>
+.wa-btn{position:fixed;bottom:90px;right:24px;z-index:997;width:52px;height:52px;border-radius:50%;background:#25D366;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:transform .2s;text-decoration:none;font-size:26px;}
+.wa-btn:hover{transform:scale(1.1);}
+.ann-banner{background:linear-gradient(135deg,#0D1B40,#1A6BCC);color:white;padding:10px 20px;text-align:center;font-size:13px;font-weight:600;position:relative;display:none;}
+.ann-banner.show{display:block;}
+.ann-close{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:none;color:white;font-size:18px;cursor:pointer;opacity:.7;}
+</style>
 
-<!-- Announcement Banner -->
-<div class="ann-banner" id="annBanner">
-  <span id="annText">—</span>
-  <a href="#" id="annLink" style="display:none">আরও জানুন →</a>
-  <button class="ann-close" onclick="closeAnn()">✕</button>
-</div>
+<a href="https://wa.me/8801634428536" target="_blank" class="wa-btn" title="WhatsApp">💬</a>
+<div class="ann-banner" id="annBanner"><span id="annText">—</span><button class="ann-close" onclick="this.parentElement.style.display='none';sessionStorage.setItem('annClosed','1')">✕</button></div>
+
 <nav id="navbar">
   <a href="index.html" class="nav-logo"><img src="logo.png" alt="TalentVerse Bangladesh"><span>Talent<b>Verse</b></span></a>
   <ul class="nav-links">
@@ -116,26 +105,9 @@
 
 <section>
   <div class="container">
-    <div class="section-header" style="text-align:center;">
-      <p class="eyebrow">Our Leaders</p>
-      <h2 class="section-title">নেতৃত্ব পরিষদ</h2>
-      <p class="section-desc" style="margin:0 auto;">দক্ষ ও অনুপ্রেরণামূলক নেতৃত্বে TalentVerse Bangladesh এগিয়ে চলেছে।</p>
+    <div id="team-container">
+      <p style="color:var(--gray);text-align:center;">লোড হচ্ছে...</p>
     </div>
-
-    <!-- Leadership section -->
-    <div id="leaders-grid" style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:36px;">
-      <p style="color:var(--gray);">লোড হচ্ছে...</p>
-    </div>
-
-    <!-- Other members -->
-    <div id="members-section" style="display:none;">
-      <div style="text-align:center;margin-bottom:24px;">
-        <p class="eyebrow">Executive Members</p>
-        <h3 class="section-title" style="font-size:28px;">আমাদের টিম</h3>
-      </div>
-      <div class="exec-grid" id="members-grid"></div>
-    </div>
-
     <div style="text-align:center;margin-top:40px;">
       <a href="join.html" class="btn-blue" style="font-size:15px;padding:14px 28px;">🤝 Join Our Team →</a>
     </div>
@@ -153,8 +125,8 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand"><img src="logo.png" alt="TalentVerse Bangladesh"><div><h4>TalentVerse Bangladesh</h4><p>Where Talent Meets Opportunity</p></div></div>
-    <div class="footer-links"><h5>Quick Links</h5><a href="index.html">Home</a><a href="about.html">About</a><a href="events.html">Events</a><a href="team.html">Executive Panel</a><a href="contact.html">Contact</a><a href="verify.html">Certificate Verify</a><a href="join.html">Join Our Team</a></div>
-    <div class="footer-contact"><h5>Contact</h5><p>📍 Bangladesh</p>
+    <div class="footer-links"><h5>Quick Links</h5><a href="index.html">Home</a><a href="about.html">About</a><a href="events.html">Events</a><a href="team.html">Executive Panel</a><a href="contact.html">Contact</a><a href="verify.html">Certificate Verify</a><a href="register.html">Register</a><a href="join.html">Join Our Team</a></div>
+    <div class="footer-contact"><h5>Contact</h5><p>📍 Bangladesh</p><p>✉️ talentversebd5@gmail.com</p>
       <div class="social-links">
         <a href="https://www.facebook.com/share/18HcL7fN3C/" target="_blank">📘 Facebook</a>
         <a href="https://www.instagram.com/talentverse.bangladesh07" target="_blank">📸 Instagram</a>
@@ -166,129 +138,100 @@
 </footer>
 
 <script src="script.js"></script>
+<script src="chatbot.js"></script>
+<button class="chat-btn" onclick="toggleChat()" title="TVBot">🤖<span class="chat-badge" id="chat-badge" style="display:none">1</span></button>
+<div class="chat-window" id="chatWindow">
+  <div class="chat-header"><img src="logo.png" alt="TVBot" class="chat-header-av"><div class="chat-header-info"><h4>TVBot 🤖</h4><p>Online · TalentVerse Bangladesh</p></div><button class="chat-close" onclick="toggleChat()">✕</button></div>
+  <div class="chat-messages" id="chatMessages">
+    <div class="msg bot"><img src="logo.png" alt="" class="msg-av"><div><div class="msg-bubble">আস্সালামু আলাইকুম! 👋 আমি TVBot। কীভাবে সাহায্য করতে পারি?</div></div></div>
+  </div>
+  <div class="chat-input"><textarea id="chatInput" placeholder="বার্তা লিখুন..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea><button class="chat-send" id="sendBtn" onclick="handleSend()">➤</button></div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 const app = initializeApp({ apiKey:"AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c", authDomain:"talentverse-bd-b072c.firebaseapp.com", databaseURL:"https://talentverse-bd-b072c-default-rtdb.firebaseio.com", projectId:"talentverse-bd-b072c", storageBucket:"talentverse-bd-b072c.firebasestorage.app", messagingSenderId:"304686688553", appId:"1:304686688553:web:0a887b8fc517e24d00af38" });
 const db = getDatabase(app);
 
-const gradients = {
-  Leadership: 'linear-gradient(135deg,#0D1B40,#1A6BCC)',
-  Administration: 'linear-gradient(135deg,#1a4080,#2563eb)',
-  IT: 'linear-gradient(135deg,#134e4a,#0f766e)',
-  Creative: 'linear-gradient(135deg,#4c1d95,#7c3aed)',
-  Cultural: 'linear-gradient(135deg,#7c2d12,#ea580c)',
-  Marketing: 'linear-gradient(135deg,#064e3b,#059669)',
-  Content: 'linear-gradient(135deg,#1e3a5f,#2563eb)',
-  Other: 'linear-gradient(135deg,#374151,#6B7280)'
-};
+const deptIcons = { Leadership:'⭐', Administration:'📋', IT:'💻', Creative:'🎨', Cultural:'🎭', Marketing:'📣', Content:'✍️', Other:'👤' };
+const deptOrder = ['Leadership','Administration','IT','Creative','Cultural','Marketing','Content','Other'];
 
 onValue(ref(db,'members'), snap => {
-  const leadersGrid = document.getElementById('leaders-grid');
-  const membersGrid = document.getElementById('members-grid');
-  const membersSection = document.getElementById('members-section');
+  const container = document.getElementById('team-container');
+  
+  // Always show founders first
+  const founders = [
+    { name:'Abdur Rahman', role:'CEO & Founder', initials:'AR', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রতিষ্ঠাতা ও প্রধান নির্বাহী কর্মকর্তা।', photo:'' },
+    { name:'Abdullah', role:'COO', initials:'AB', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রধান পরিচালন কর্মকর্তা।', photo:'' }
+  ];
 
-  if(!snap.exists()){
-    leadersGrid.innerHTML = '<div class="empty-state"><div class="icon">👥</div><p>কোনো Member নেই।</p></div>';
-    return;
+  let allMembers = [...founders];
+  
+  if(snap.exists()) {
+    const data = snap.val();
+    allMembers = [...founders, ...Object.values(data)];
   }
 
-  const data = snap.val();
-  const all = Object.values(data);
-  const leaders = all.filter(m => m.dept === 'Leadership');
-  const others = all.filter(m => m.dept !== 'Leadership');
+  // Group by department
+  const grouped = {};
+  allMembers.forEach(m => {
+    const dept = m.dept || 'Other';
+    if(!grouped[dept]) grouped[dept] = [];
+    grouped[dept].push(m);
+  });
 
-  const makeCard = (m, maxWidth='220px') => {
-    const grad = gradients[m.dept] || gradients.Other;
-    const av = m.photo
-      ? `<img src="${m.photo}" class="exec-avatar">`
-      : `<div class="exec-avatar-placeholder">${m.initials||m.name.substring(0,2).toUpperCase()}</div>`;
-    const badge = m.dept === 'Leadership'
-      ? `<span class="leader-badge">⭐ ${m.dept}</span>`
-      : `<span class="dept-badge">${m.dept}</span>`;
-    return `<div class="exec-card" style="max-width:${maxWidth};width:100%;">
-      <div class="exec-top" style="background:${grad};">${av}<h4>${m.name}</h4><p>${m.role}</p></div>
-      <div class="exec-body">${badge}<p class="bio">${m.bio||''}</p></div>
-    </div>`;
-  };
+  // Sort departments
+  const sortedDepts = Object.keys(grouped).sort((a,b) => {
+    const ai = deptOrder.indexOf(a); const bi = deptOrder.indexOf(b);
+    return (ai===-1?99:ai) - (bi===-1?99:bi);
+  });
 
-  if(leaders.length > 0) {
-    leadersGrid.innerHTML = leaders.map(m => makeCard(m,'240px')).join('');
-  } else {
-    leadersGrid.innerHTML = '<div class="empty-state"><div class="icon">👥</div><p>Admin থেকে Leader যোগ করুন।</p></div>';
-  }
-
-  if(others.length > 0) {
-    membersSection.style.display = 'block';
-    membersGrid.innerHTML = others.map(m => makeCard(m,'200px')).join('');
-  }
-});
-</script>
-
-<!-- CHATBOT -->
-<link rel="stylesheet" href="chatbot.css">
-<button class="chat-btn" onclick="toggleChat()" title="TVBot">🤖<span class="chat-badge" id="chat-badge" style="display:none">1</span></button>
-<div class="chat-window" id="chatWindow">
-  <div class="chat-header">
-    <img src="logo.png" alt="TVBot" class="chat-header-av">
-    <div class="chat-header-info"><h4>TVBot 🤖</h4><p>Online · TalentVerse Bangladesh</p></div>
-    <button class="chat-close" onclick="toggleChat()">✕</button>
-  </div>
-  <div class="chat-messages" id="chatMessages">
-    <div class="msg bot">
-      <img src="logo.png" alt="" class="msg-av">
-      <div>
-        <div class="msg-bubble">আস্সালামু আলাইকুম! 👋 আমি TVBot। আপনাকে কীভাবে সাহায্য করতে পারি?</div>
-        <div class="quick-btns" style="margin-top:8px;">
-          <button class="quick-btn" onclick="quickMsg(this)">🏆 Events জানতে চাই</button>
-          <button class="quick-btn" onclick="quickMsg(this)">🤝 Join করতে চাই</button>
-          <button class="quick-btn" onclick="quickMsg(this)">🎖️ Certificate Verify</button>
-          <button class="quick-btn" onclick="quickMsg(this)">📞 যোগাযোগ করব</button>
-        </div>
+  container.innerHTML = sortedDepts.map(dept => {
+    const members = grouped[dept];
+    const icon = deptIcons[dept] || '👤';
+    const cards = members.map(m => {
+      const av = m.photo
+        ? `<img src="${m.photo}" class="exec-avatar">`
+        : `<div class="exec-avatar-ph">${m.initials||m.name.substring(0,2).toUpperCase()}</div>`;
+      return `<div class="exec-card">
+        <div class="exec-top">${av}<h4>${m.name}</h4><p>${m.role}</p></div>
+        <div class="exec-body"><span class="dept-badge">${dept}</span>${m.bio?`<p class="bio">${m.bio}</p>`:''}</div>
+      </div>`;
+    }).join('');
+    return `<div class="dept-section">
+      <div class="dept-header">
+        <div class="dept-icon">${icon}</div>
+        <div class="dept-info"><h3>${dept}</h3></div>
+        <span class="dept-count">${members.length} Members</span>
       </div>
-    </div>
-  </div>
-  <div class="chat-input">
-    <textarea id="chatInput" placeholder="বার্তা লিখুন..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-    <button class="chat-send" id="sendBtn" onclick="handleSend()">➤</button>
-  </div>
-</div>
-<script src="chatbot.js"></script>
-<script>
-let chatOpen=false;
-function toggleChat(){chatOpen=!chatOpen;document.getElementById("chatWindow").classList.toggle("open",chatOpen);document.getElementById("chat-badge").style.display="none";if(chatOpen)document.getElementById("chatInput").focus();}
-function autoResize(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,80)+"px";}
-function handleKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleSend();}}
-function quickMsg(btn){document.getElementById("chatInput").value=btn.textContent.trim();handleSend();}
-function addMsg(text,isUser){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg "+(isUser?"user":"bot");if(isUser){div.innerHTML=`<div class="msg-av-u">আ</div><div class="msg-bubble">${text}</div>`;}else{div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="msg-bubble">${text.replace(/\n/g,"<br>")}</div>`;}msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
-function showTyping(){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg bot";div.id="typing";div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="typing"><span></span><span></span><span></span></div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
-function removeTyping(){const t=document.getElementById("typing");if(t)t.remove();}
-async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.getReply(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, সমস্যা হয়েছে। WhatsApp: +8801634428536",false);}btn.disabled=false;input.focus();}
-setTimeout(()=>{if(!chatOpen)document.getElementById("chat-badge").style.display="flex";},3000);
-</script>
+      <div class="exec-grid">${cards}</div>
+    </div>`;
+  }).join('');
+});
 
-
-<script>
-// Announcement Banner
-function closeAnn() { document.getElementById('annBanner').style.display='none'; sessionStorage.setItem('annClosed','1'); }
-</script>
-<script type="module">
-import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const apps = getApps();
-const app = apps.length ? apps[0] : initializeApp({ apiKey:"AIzaSyA91JckJ_FYGiNZxSeAlTjddREl5ok3B3c", authDomain:"talentverse-bd-b072c.firebaseapp.com", databaseURL:"https://talentverse-bd-b072c-default-rtdb.firebaseio.com", projectId:"talentverse-bd-b072c", storageBucket:"talentverse-bd-b072c.firebasestorage.app", messagingSenderId:"304686688553", appId:"1:304686688553:web:0a887b8fc517e24d00af38" });
-const db = getDatabase(app);
+// Announcement
 onValue(ref(db,'announcement'), snap => {
   if(!snap.exists()) return;
   const a = snap.val();
   if(a.active && !sessionStorage.getItem('annClosed')) {
-    document.getElementById('annText').textContent = a.text || '';
-    const link = document.getElementById('annLink');
-    if(a.link) { link.href = a.link; link.style.display='inline'; }
+    document.getElementById('annText').textContent = a.text||'';
     document.getElementById('annBanner').classList.add('show');
     document.getElementById('annBanner').style.display='block';
   }
 });
+</script>
+
+<script>
+let chatOpen=false;
+function toggleChat(){chatOpen=!chatOpen;document.getElementById("chatWindow").classList.toggle("open",chatOpen);document.getElementById("chat-badge").style.display="none";}
+function autoResize(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,80)+"px";}
+function handleKey(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();handleSend();}}
+function addMsg(text,isUser){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg "+(isUser?"user":"bot");if(isUser){div.innerHTML=`<div class="msg-av-u">আ</div><div class="msg-bubble">${text}</div>`;}else{div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="msg-bubble">${text.replace(/\n/g,"<br>")}</div>`;}msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function showTyping(){const msgs=document.getElementById("chatMessages");const div=document.createElement("div");div.className="msg bot";div.id="typing";div.innerHTML=`<img src="logo.png" alt="" class="msg-av"><div class="typing"><span></span><span></span><span></span></div>`;msgs.appendChild(div);msgs.scrollTop=msgs.scrollHeight;}
+function removeTyping(){const t=document.getElementById("typing");if(t)t.remove();}
+async function handleSend(){const input=document.getElementById("chatInput");const btn=document.getElementById("sendBtn");const text=input.value.trim();if(!text)return;input.value="";input.style.height="auto";addMsg(text,true);btn.disabled=true;showTyping();try{const reply=await window.TVBot.getReply(text);removeTyping();addMsg(reply,false);}catch(e){removeTyping();addMsg("দুঃখিত, WhatsApp: +8801634428536",false);}btn.disabled=false;}
+setTimeout(()=>{if(!chatOpen)document.getElementById("chat-badge").style.display="flex";},3000);
 </script>
 </body>
 </html>

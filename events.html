@@ -146,7 +146,7 @@
   <div class="footer-inner">
     <div class="footer-brand"><img src="logo.png" alt="TalentVerse Bangladesh"><div><h4>TalentVerse Bangladesh</h4><p>Where Talent Meets Opportunity</p></div></div>
     <div class="footer-links"><h5>Quick Links</h5><a href="index.html">Home</a><a href="about.html">About</a><a href="events.html">Events</a><a href="team.html">Executive Panel</a><a href="contact.html">Contact</a><a href="join.html">Join Our Team</a></div>
-    <div class="footer-contact"><h5>Contact</h5><p>📍 Bangladesh</p><p>✉️ info@talentverse.bd</p><div class="social-links"><a href="https://www.facebook.com/share/18HcL7fN3C/" target="_blank">📘 Facebook</a><a href="https://www.instagram.com/talentverse.bangladesh07" target="_blank">📸 Instagram</a></div></div>
+    <div class="footer-contact"><h5>Contact</h5><p>📍 Bangladesh</p><p>✉️ talentversebd5@gmail.com</p><div class="social-links"><a href="https://www.facebook.com/share/18HcL7fN3C/" target="_blank">📘 Facebook</a><a href="https://www.instagram.com/talentverse.bangladesh07" target="_blank">📸 Instagram</a></div></div>
   </div>
   <div class="footer-bottom"><p>© 2026 TalentVerse Bangladesh. All Rights Reserved.</p></div>
 </footer>
@@ -191,7 +191,7 @@ onValue(ref(db, 'events'), snap => {
           <span style="font-size:11px;font-weight:700;padding:2px 10px;border-radius:100px;${badgeStyle}">${e.status}</span>
         </div>
         <p>${e.desc}</p>
-        <a href="contact.html" class="event-btn">Register / Learn More →</a>
+        <a href="register.html" class="event-btn">Register / Learn More →</a>
       </div>
     </div>`;
   }).join('');
@@ -212,12 +212,7 @@ onValue(ref(db, 'events'), snap => {
       <img src="logo.png" alt="" class="msg-av">
       <div>
         <div class="msg-bubble">আস্সালামু আলাইকুম! 👋 আমি TVBot। আপনাকে কীভাবে সাহায্য করতে পারি?</div>
-        <div class="quick-btns" style="margin-top:8px;">
-          <button class="quick-btn" onclick="quickMsg(this)">🏆 Events জানতে চাই</button>
-          <button class="quick-btn" onclick="quickMsg(this)">🤝 Join করতে চাই</button>
-          <button class="quick-btn" onclick="quickMsg(this)">🎖️ Certificate Verify</button>
-          <button class="quick-btn" onclick="quickMsg(this)">📞 যোগাযোগ করব</button>
-        </div>
+        <div class="quick-btns" id="chatQuickBtns" style="margin-top:8px;"><button class="quick-btn" onclick="quickMsg(this)">🏆 Events জানতে চাই</button><button class="quick-btn" onclick="quickMsg(this)">🤝 Join করতে চাই</button><button class="quick-btn" onclick="quickMsg(this)">🎖️ Certificate Verify</button><button class="quick-btn" onclick="quickMsg(this)">📞 যোগাযোগ করব</button></div>
       </div>
     </div>
   </div>
