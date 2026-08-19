@@ -157,21 +157,27 @@ const db = getDatabase(app);
 const deptIcons = { Leadership:'⭐', Administration:'📋', IT:'💻', Creative:'🎨', Cultural:'🎭', Marketing:'📣', Content:'✍️', Other:'👤' };
 const deptOrder = ['Leadership','Administration','IT','Creative','Cultural','Marketing','Content','Other'];
 
-// Default founder data — used until an admin edits them in the Admin Panel,
-// at which point the Firebase entry (same key) takes over.
-const founderDefaults = {
-  founder_ceo: { name:'Abdur Rahman', role:'CEO & Founder', initials:'AR', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রতিষ্ঠাতা ও প্রধান নির্বাহী কর্মকর্তা।', photo:'' },
-  founder_coo: { name:'Abdullah', role:'COO', initials:'AB', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রধান পরিচালন কর্মকর্তা।', photo:'' }
-};
-
 onValue(ref(db,'members'), snap => {
   const container = document.getElementById('team-container');
 
-  const data = snap.exists() ? snap.val() : {};
-  // Merge: Firebase entries with keys founder_ceo / founder_coo override the defaults,
-  // so editing them in Admin Panel updates what shows here.
-  const merged = { ...founderDefaults, ...data };
-  const allMembers = Object.values(merged);
+  const founderDefaults = {
+    founder1:{ name:'Abdur Rahman', role:'CEO & Founder', initials:'AR', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রতিষ্ঠাতা ও প্রধান নির্বাহী কর্মকর্তা।', photo:'' },
+    founder2:{ name:'Abdullah', role:'COO', initials:'AB', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রধান পরিচালন কর্মকর্তা।', photo:'' }
+  };
+
+  const raw = snap.exists() ? snap.val() : {};
+
+  // Founders always show first — merged with any admin edits saved in Firebase
+  const founders = [
+    { ...founderDefaults.founder1, ...(raw.founder1||{}) },
+    { ...founderDefaults.founder2, ...(raw.founder2||{}) }
+  ];
+
+  const otherMembers = Object.keys(raw)
+    .filter(k => k !== 'founder1' && k !== 'founder2')
+    .map(k => raw[k]);
+
+  let allMembers = [...founders, ...otherMembers];
 
   // Group by department
   const grouped = {};

@@ -479,22 +479,10 @@ onValue(ref(db,'events'),snap=>{
 });
 
 // TEAM
-// Default founder data — mirrors team.html. These always exist visually even
-// before an admin ever saves them to Firebase, and are editable like any member.
 const founderDefaults = {
-  founder_ceo: { name:'Abdur Rahman', role:'CEO & Founder', initials:'AR', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রতিষ্ঠাতা ও প্রধান নির্বাহী কর্মকর্তা।', photo:'' },
-  founder_coo: { name:'Abdullah', role:'COO', initials:'AB', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রধান পরিচালন কর্মকর্তা।', photo:'' }
+  founder1:{name:'Abdur Rahman', role:'CEO & Founder', initials:'AR', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রতিষ্ঠাতা ও প্রধান নির্বাহী কর্মকর্তা।', photo:''},
+  founder2:{name:'Abdullah', role:'COO', initials:'AB', dept:'Leadership', bio:'TalentVerse Bangladesh এর প্রধান পরিচালন কর্মকর্তা।', photo:''}
 };
-
-function resetMemberForm(){
-  ['mn','mr','mi','mb2'].forEach(i=>document.getElementById(i).value='');
-  document.getElementById('md').value='';
-  document.getElementById('md-sel').value='';
-  document.getElementById('pp').style.display='none';
-  document.getElementById('pu-txt').textContent='📸 ছবি সিলেক্ট করতে ক্লিক করুন';
-  document.getElementById('mf').value='';
-  window._editingMemberPhoto='';
-}
 
 window.addMember = function() {
   const file=document.getElementById('mf').files[0];
@@ -504,88 +492,93 @@ window.addMember = function() {
     if(!m.name||!m.role){alert('নাম ও পদবী দিন!');return;}
     push(ref(db,'members'),m).then(()=>{
       ok('mb-ok');
-      resetMemberForm();
-    });
+      ['mn','mr','mi','mb2'].forEach(i=>document.getElementById(i).value='');
+      document.getElementById('pp').style.display='none';
+      document.getElementById('pu-txt').textContent='📸 ছবি সিলেক্ট করতে ক্লিক করুন';
+      document.getElementById('mf').value='';
+    }).catch(err=>{ alert('❌ যোগ করা ব্যর্থ হয়েছে: '+err.message); console.error('addMember failed:', err); });
   };
   if(file){const r=new FileReader();r.onload=e=>save(e.target.result);r.readAsDataURL(file);}
   else save();
 }
+window.deleteMember = function(k){if(confirm('মুছবেন?'))remove(ref(db,'members/'+k));}
 
 window.editMember = function(k) {
-  const m = window._membersData[k];
-  if(!m) return;
+  const data = window._membersData;
+  if(!data || !data[k]) return;
+  const m = data[k];
   document.getElementById('mn').value = m.name||'';
   document.getElementById('mr').value = m.role||'';
   document.getElementById('mi').value = m.initials||'';
+  const depts=['Leadership','Administration','IT','Creative','Cultural','Marketing','Content','Other'];
+  document.getElementById('md-sel').value = depts.includes(m.dept) ? m.dept : '';
   document.getElementById('md').value = m.dept||'';
-  document.getElementById('md-sel').value = ['Leadership','Administration','IT','Creative','Cultural','Marketing','Content','Other'].includes(m.dept) ? m.dept : '';
   document.getElementById('mb2').value = m.bio||'';
-  window._editingMemberPhoto = m.photo||'';
-  const pp = document.getElementById('pp');
-  if(m.photo){ pp.src = m.photo; pp.style.display='block'; document.getElementById('pu-txt').textContent='✅ ছবি সিলেক্ট হয়েছে'; }
-  else { pp.style.display='none'; document.getElementById('pu-txt').textContent='📸 ছবি সিলেক্ট করতে ক্লিক করুন'; }
+  if(m.photo){ document.getElementById('pp').src=m.photo; document.getElementById('pp').style.display='block'; document.getElementById('pu-txt').textContent='✅ বর্তমান ছবি (পরিবর্তন করতে নতুন ছবি দিন)'; }
+  else { document.getElementById('pp').style.display='none'; document.getElementById('pu-txt').textContent='📸 ছবি সিলেক্ট করতে ক্লিক করুন'; }
 
   const btn = document.querySelector('#p-team .bs');
   btn.textContent = '💾 Member আপডেট করুন';
-  btn.disabled = false;
   btn.onclick = function() {
-    const file = document.getElementById('mf').files[0];
-    const init = (document.getElementById('mi').value||document.getElementById('mn').value.substring(0,2)).toUpperCase();
-    const finish = (photo) => {
-      const upd = { name:document.getElementById('mn').value.trim(), role:document.getElementById('mr').value.trim(), initials:init, dept:document.getElementById('md').value, bio:document.getElementById('mb2').value.trim(), photo, updatedAt:Date.now() };
+    const file=document.getElementById('mf').files[0];
+    const init=(document.getElementById('mi').value||document.getElementById('mn').value.substring(0,2)).toUpperCase();
+    const save=(photo)=>{
+      const upd={name:document.getElementById('mn').value.trim(),role:document.getElementById('mr').value.trim(),initials:init,dept:document.getElementById('md').value,bio:document.getElementById('mb2').value.trim(),photo:photo!==undefined?photo:(m.photo||''),updatedAt:Date.now()};
       if(!upd.name||!upd.role){alert('নাম ও পদবী দিন!');return;}
-      btn.disabled = true;
-      btn.textContent = '⏳ সেভ হচ্ছে...';
-      set(ref(db,'members/'+k), {...m, ...upd}).then(()=>{
+      btn.disabled=true; btn.textContent='⏳ সেভ হচ্ছে...';
+      set(ref(db,'members/'+k), {...window._membersData[k], ...upd}).then(()=>{
         ok('mb-ok');
+        btn.disabled=false;
         btn.textContent = '➕ Member যোগ করুন';
         btn.onclick = window.addMember;
-        resetMemberForm();
-        document.getElementById('mb-cancel').style.display = 'none';
+        ['mn','mr','mi','mb2'].forEach(i=>document.getElementById(i).value='');
+        document.getElementById('pp').style.display='none';
+        document.getElementById('pu-txt').textContent='📸 ছবি সিলেক্ট করতে ক্লিক করুন';
+        document.getElementById('mf').value='';
+        document.getElementById('mb-cancel').style.display='none';
       }).catch(err=>{
-        btn.disabled = false;
-        btn.textContent = '💾 Member আপডেট করুন';
-        alert('❌ Update ব্যর্থ হয়েছে: ' + err.message);
+        btn.disabled=false; btn.textContent='💾 Member আপডেট করুন';
+        alert('❌ Update ব্যর্থ হয়েছে: '+err.message);
         console.error('editMember update failed:', err);
       });
     };
-    if(file){ const r=new FileReader(); r.onload=e=>finish(e.target.result); r.readAsDataURL(file); }
-    else finish(window._editingMemberPhoto||'');
+    if(file){const r=new FileReader();r.onload=e=>save(e.target.result);r.readAsDataURL(file);}
+    else save(undefined);
   };
   document.getElementById('mb-cancel').style.display = 'inline-block';
-  sp('team', document.querySelectorAll('.ni')[3]);
+  sp('team', document.querySelectorAll('.ni')[2]);
   window.scrollTo(0,0);
 }
-
 window.cancelEditMember = function() {
   const btn = document.querySelector('#p-team .bs');
   btn.textContent = '➕ Member যোগ করুন';
   btn.onclick = window.addMember;
   btn.disabled = false;
-  document.getElementById('mb-cancel').style.display = 'none';
-  resetMemberForm();
-}
-
-window.deleteMember = function(k){
-  const isFounder = k==='founder_ceo' || k==='founder_coo';
-  const msg = isFounder ? 'এটি একজন Founder — মুছে ফেললে ডিফল্ট তথ্যে ফিরে যাবে। এগিয়ে যাবেন?' : 'মুছবেন?';
-  if(confirm(msg)) remove(ref(db,'members/'+k));
+  ['mn','mr','mi','mb2'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('pp').style.display='none';
+  document.getElementById('pu-txt').textContent='📸 ছবি সিলেক্ট করতে ক্লিক করুন';
+  document.getElementById('mf').value='';
+  document.getElementById('mb-cancel').style.display='none';
 }
 
 onValue(ref(db,'members'),snap=>{
   const list=document.getElementById('members-list');
-  const data = { ...founderDefaults, ...(snap.exists() ? snap.val() : {}) };
-  window._membersData = data;
-  const keys = Object.keys(data);
-  document.getElementById('d-mb').textContent = keys.length;
-  // Founders first
-  keys.sort((a,b)=> (a==='founder_ceo'?-2:a==='founder_coo'?-1:0) - (b==='founder_ceo'?-2:b==='founder_coo'?-1:0));
+  const raw = snap.exists() ? snap.val() : {};
+  // Abdur Rahman & Abdullah are permanent founder slots — always shown & editable,
+  // even before they have ever been saved to Firebase.
+  const merged = {
+    founder1: {...founderDefaults.founder1, ...(raw.founder1||{})},
+    founder2: {...founderDefaults.founder2, ...(raw.founder2||{})}
+  };
+  Object.keys(raw).forEach(k=>{ if(k!=='founder1'&&k!=='founder2') merged[k]=raw[k]; });
+  window._membersData = merged;
+  const keys=Object.keys(merged);
+  document.getElementById('d-mb').textContent=keys.length;
   list.innerHTML=keys.map(k=>{
-    const m=data[k];
-    const isFounder = k==='founder_ceo' || k==='founder_coo';
+    const m=merged[k];
+    const isFounder = k==='founder1'||k==='founder2';
     const av=m.photo?`<img src="${m.photo}" class="mav">`:`<div class="mav-p">${m.initials||'?'}</div>`;
-    const delBtn = isFounder ? `<button class="bd" onclick="window.deleteMember('${k}')" title="ডিফল্টে ফিরিয়ে দিন">↺</button>` : `<button class="bd" onclick="window.deleteMember('${k}')">🗑</button>`;
-    return `<div class="li">${av}<div class="li-info"><h4>${m.name}${isFounder?' <span class="badge by">Founder</span>':''}<span class="badge bb">${m.dept}</span></h4><p>${m.role}</p></div><div style="display:flex;gap:8px;"><button class="action-btn" onclick="window.editMember('${k}')">✏️ Edit</button>${delBtn}</div></div>`;
+    return `<div class="li">${av}<div class="li-info"><h4>${m.name}<span class="badge bb">${m.dept}</span>${isFounder?'<span class="badge by">প্রতিষ্ঠাতা</span>':''}</h4><p>${m.role}</p></div><div style="display:flex;gap:8px;"><button class="action-btn" onclick="window.editMember('${k}')">✏️ Edit</button>${isFounder?'':`<button class="bd" onclick="window.deleteMember('${k}')">🗑</button>`}</div></div>`;
   }).join('');
 });
 
